@@ -34,30 +34,37 @@ defineProps({
   <td class="p-2">
     {{ item.factory }}
   </td>
+
   <td class="p-2">
     {{ item.lab }}
   </td>
 
   <td class="p-2">
-    {{ item.createdAt }}
+    {{ $filters.formatDate(item.createdAt, 'LL') }}
     <br />
     <p class="text-xs">
+      {{ $filters.formatDate(item.createdAt, 'hh:mm:ss') }}
+      by
       {{ item.createdBy }}
     </p>
   </td>
 
   <td class="p-2">
-    {{ item.approvedAt }}
+    {{ $filters.formatDate(item.approvedAt, 'LL') }}
     <br />
     <p class="text-xs">
+      {{ $filters.formatDate(item.approvedAt, 'hh:mm:ss') }}
+      by
       {{ item.approvedBy }}
     </p>
   </td>
 
   <td class="p-2">
-    {{ item.completedAt }}
+    {{ $filters.formatDate(item.completedAt, 'LL') }}
     <br />
     <p class="text-xs">
+      {{ $filters.formatDate(item.completedAt, 'hh:mm:ss') }}
+      by
       {{ item.completedBy }}
     </p>
   </td>
