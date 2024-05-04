@@ -28,8 +28,10 @@ export default {
   methods: {
     login() {
       // check validation
+      // will not execute here
       if (!this.username || !this.password) {
         this.errorMessage = 'Please enter both username and password.';
+        console.log("The 'here' statement is executed.");
         return;
       }
 
