@@ -12,5 +12,5 @@ export const router = createRouter({
     {path: '/approval', name: 'approval', component: Approval},
     {path: '/dashboard', name: 'dashboard', component: Dashboard},
   ],
-  linkActiveClass: 'underline underline-offset-4'
+  linkActiveClass: 'bg-gray-100 dark:bg-gray-700'
 });
