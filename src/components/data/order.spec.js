@@ -5,9 +5,9 @@ export const columns = [
   'Priority',     // Select: 一般, 急單, 特急單
   'Fabrication',  // Select: Fab A, Fab B, Fab C
   'Lab',          // Select: 化學實驗室, 表面分析實驗室, 成分分析實驗室
-  'Create Time',  // String: createdAt (timestamp) + createdBy (usedID)
-  'Approve Time', // String: approvedAt (timestamp) + approvedBy (usedID)
-  'Complete Time',// String: completedAt (timestamp) + completedAt (usedID)
+  'Start Time',   // String: createdAt (timestamp)
+  'End Time',     // String: completedAt (timestamp)
+  'Issuer',       // String: createdBy (userID)
   'Status',       // Select: Issued (gray), Approved (yellow), Completed (green), Rejected (red)
   'Actions'       // Button: Attachment, Edit, Delete
 ]

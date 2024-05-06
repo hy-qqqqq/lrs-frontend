@@ -13,7 +13,7 @@ defineProps({
 </script>
 
 <template>
-  <table class="w-full rounded-xl table-auto text-left leading-loose">
+  <table class="w-full table-auto text-left leading-loose">
     <thead>
       <tr class="bg-gray-100 capitalize">
         <th class="font-bold p-2" v-for="(header, index) in headers" :key="index">{{ header }}</th>
