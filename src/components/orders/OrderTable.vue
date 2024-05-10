@@ -1,5 +1,9 @@
 <script setup>
+import { ref } from "vue";
+// Components
 import OrderItem from './OrderItem.vue'
+import HistoryOrder from './HistoryOrder.vue'
+// Defines
 defineProps({
   items: {
     type: Array,
@@ -10,9 +14,12 @@ defineProps({
     required: true
   }
 })
+// Variables
+const showHistory = ref(false)
 </script>
 
 <template>
+  <HistoryOrder v-model:show="showHistory"/>
   <table class="w-full table-auto text-left leading-loose">
     <thead>
       <tr class="bg-gray-100 capitalize">
@@ -21,7 +28,7 @@ defineProps({
     </thead>
     <tbody class="text-gray-500">
       <tr class="transition-all duration-500 hover:bg-gray-50" v-for="(item, index) in items" :key="index">
-        <OrderItem :item="item"/>
+        <OrderItem v-model:showHistory="showHistory" :item="item"/>
       </tr>
     </tbody>
   </table>

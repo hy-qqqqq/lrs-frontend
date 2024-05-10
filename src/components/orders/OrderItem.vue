@@ -1,14 +1,17 @@
 <script setup>
+// Components
 import IconEdit from '../icons/IconEdit.vue'
 import IconHistory from '../icons/IconHistory.vue'
 import IconDownload from '../icons/IconDownload.vue'
 import IconTrashcan from '../icons/IconTrashcan.vue'
+// Defines
 defineProps({
   item: {
     type: Object,
     required: true
   }
 })
+const showHistory = defineModel('showHistory')
 </script>
 
 <template>
@@ -97,7 +100,7 @@ defineProps({
       <button class="p-2 rounded-full bg-white group transition-all duration-500 hover:bg-gray-500 flex item-center">
         <IconDownload />
       </button>
-      <button class="p-2 rounded-full bg-white group transition-all duration-500 hover:bg-gray-500 flex item-center">
+      <button @click="showHistory=item" data-modal-target="timeline-modal" data-modal-toggle="timeline-modal" type="button" class="p-2 rounded-full bg-white group transition-all duration-500 hover:bg-gray-500 flex item-center">
         <IconHistory />
       </button>
     </div>
