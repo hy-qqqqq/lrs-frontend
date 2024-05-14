@@ -1,53 +1,67 @@
 <template>
   <div class="login-container">
-    <h2>Login</h2>
-    <form @submit.prevent="login" class="login-form">
+    <p>Welcome to the login page!</p>
+    <form @submit.prevent="login">
       <div class="form-group">
-        <label for="username">Username:</label>
+        <label for="username">User ID:</label>
         <input type="text" id="username" v-model="username" required>
       </div>
       <div class="form-group">
         <label for="password">Password:</label>
         <input type="password" id="password" v-model="password" required>
       </div>
-      <button type="submit">Login</button>
+      <button type="submit">Log In</button>
     </form>
-    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
   </div>
 </template>
 
+
+
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
       username: '',
-      password: '',
-      errorMessage: ''
+      password: ''
     };
   },
   methods: {
     login() {
-      // check validation
-      // will not execute here
+      // Check if username and password are provided
       if (!this.username || !this.password) {
-        this.errorMessage = 'Please enter both username and password.';
-        console.log("The 'here' statement is executed.");
+        alert('Please enter both user ID and password.');
         return;
       }
 
-      // sending a request to your backend
-      // login backend 
-      console.log('Username:', this.username);
-      console.log('Password:', this.password);
+      // Prepare data for login request
+      const data = {
+        userID: this.username,
+        userPassword: this.password
+      };
 
-      // clear form fields
+      // Send login request to the backend
+      axios.post('http://localhost:5001/api/login', data)
+        .then(response => {
+          // Handle successful login
+          console.log(response.data);
+          alert('Login successful!'); // You can redirect or perform other actions here
+        })
+        .catch(error => {
+          // Handle login error
+          console.error(error);
+          alert('Invalid user ID or password.');
+        });
+
+      // Clear username and password fields after submission
       this.username = '';
       this.password = '';
-      this.errorMessage = '';
     }
   }
 };
 </script>
+
 
 <style scoped>
 @import '@/assets/login.css';

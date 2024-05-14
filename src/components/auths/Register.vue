@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -40,19 +42,31 @@ export default {
   },
   methods: {
     register() {
-      // check validation
+      // Check validation
       if (!this.userID || !this.userPassword || !this.department) {
         this.errorMessage = 'Please fill out all fields.';
         return;
       }
 
-      // sending a request to your backend
-      // register backend 
-      console.log('User ID:', this.userID);
-      console.log('Password:', this.userPassword);
-      console.log('Department:', this.department);
+      // Sending a request to your backend
+      const data = {
+        userID: this.userID,
+        userPassword: this.userPassword,
+        dep: this.department
+      };
 
-      // clear form fields
+      axios.post('http://localhost:5001/api/register', data)
+        .then(response => {
+          console.log(response.data); // Log the response from the backend
+          // Optionally, you can handle successful registration here
+          // For example, display a success message to the user
+        })
+        .catch(error => {
+          console.error(error);
+          this.errorMessage = 'An error occurred while registering. Please try again.';
+        });
+
+      // Clear form fields
       this.userID = '';
       this.userPassword = '';
       this.department = '';
@@ -61,6 +75,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 @import '@/assets/register.css';
