@@ -1,4 +1,6 @@
 <script setup>
+// Imports
+import { dataTypes } from '../data/order.spec.js'
 // Defines
 const show = defineModel('show', {required: true})
 </script>
@@ -38,9 +40,7 @@ const show = defineModel('show', {required: true})
           </label>
           <select id="factory" required class="text-gray-600 appearance-none cursor-pointer invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 hover:bg-gray-100/50 shadow-sm border text-sm rounded-lg p-2">
             <option value="" disabled selected>Select your fabrication</option>
-            <option>Fab A</option>
-            <option>Fab B</option>
-            <option>Fab C</option>
+            <option v-for="val in dataTypes['factory']" :value="val.value">{{ val.name }}</option>
           </select>
         </div>
         <div class="flex flex-col gap-1">
@@ -50,9 +50,7 @@ const show = defineModel('show', {required: true})
           </label>
           <select id="lab" required class="text-gray-600 appearance-none cursor-pointer invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 hover:bg-gray-100/50 shadow-sm border text-sm rounded-lg p-2">
             <option value="" disabled selected>Select the laboratory for the order</option>
-            <option value="chemical">化學實驗室</option>
-            <option value="surface">表面分析實驗室</option>
-            <option value="composition">成分分析實驗室</option>
+            <option v-for="val in dataTypes['lab']" :value="val.value">{{ val.name }}</option>
           </select>
         </div>
         <div class="flex flex-col gap-1">
@@ -62,9 +60,7 @@ const show = defineModel('show', {required: true})
           </label>
           <select id="priority" required class="text-gray-600 appearance-none cursor-pointer invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 hover:bg-gray-100/50 shadow-sm border text-sm rounded-lg p-2">
             <option value="" disabled selected>Select the order priority</option>
-            <option value="regular">一般</option>
-            <option value="urgent">急件</option>
-            <option value="emergency">特急</option>
+            <option v-for="val in dataTypes['priority']" :value="val.value">{{ val.name }}</option>
           </select>
         </div>
         <div class="flex flex-col gap-1">
@@ -73,7 +69,7 @@ const show = defineModel('show', {required: true})
         </div>
         <div class="col-span-2 flex flex-col gap-1">
           <label for="file" class="font-semibold">Attachments</label>
-          <input id="file" type="file" multiple class="text-gray-600 border rounded-lg cursor-pointer shadow-sm focus:outline-none p-2
+          <input id="file" type="file" title="" multiple class="text-gray-600 border rounded-lg cursor-pointer shadow-sm focus:outline-none p-2
             file:mr-4 file:py-2 file:px-4 file:rounded-md
             file:border-0 file:font-semibold
             file:bg-blue-50 file:text-blue-700

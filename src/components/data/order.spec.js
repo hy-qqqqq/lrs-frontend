@@ -6,11 +6,35 @@ export const columns = [
   'Fabrication',  // Select: Fab A, Fab B, Fab C
   'Lab',          // Select: 化學實驗室, 表面分析實驗室, 成分分析實驗室
   'Start Time',   // String: createdAt (timestamp)
-  'End Time',     // String: completedAt (timestamp)
+  'Update Time',  // String: (timestamp)
   'Issuer',       // String: createdBy (userID)
   'Status',       // Select: Issued (gray), Approved (yellow), Completed (green), Rejected (red)
-  'Actions'       // Button: Attachment, Edit, Delete
+  'Action'        // Button: Edit
 ]
+
+export const dataTypes = {
+  'priority': [
+    {name: '一般', value: 'regular'},
+    {name: '急單', value: 'urgent'},
+    {name: '特急單', value: 'emergency'}
+  ],
+  'factory': [
+    {name: 'Fab A', value: 'Fab A'},
+    {name: 'Fab B', value: 'Fab B'},
+    {name: 'Fab C', value: 'Fab C'}
+  ],
+  'lab': [
+    {name: '化學實驗室', value: 'chemical'},
+    {name: '表面分析實驗室', value: 'surface'},
+    {name: '成分分析實驗室', value: 'composition'}
+  ],
+  'status': [
+    {name: 'Issued', value: 'Issued'},
+    {name: 'Approved', value: 'Approved'}, 
+    {name: 'Completed', value: 'Completed'}, 
+    {name: 'Rejected', value: 'Rejected'}
+  ]
+}
 
 // TODO: temporary mock data, need to remove later
 export const data = [
@@ -31,7 +55,7 @@ export const data = [
   },
   {
     serialNo: 'LabA-240505-002',
-    priority: '特急',
+    priority: '特急單',
     factory: 'Fab B',
     lab: '表面分析實驗室',
     status: 'Approved',
@@ -46,7 +70,7 @@ export const data = [
   },
   {
     serialNo: 'LabA-240505-003',
-    priority: '急件',
+    priority: '急單',
     factory: 'Fab C',
     lab: '成分分析實驗室',
     status: 'Rejected',
@@ -61,7 +85,7 @@ export const data = [
   },
   {
     serialNo: 'LabA-240505-004',
-    priority: '急件',
+    priority: '急單',
     factory: 'Fab C',
     lab: '成分分析實驗室',
     status: 'Completed',
@@ -76,7 +100,7 @@ export const data = [
   },
   {
     serialNo: 'LabA-240505-005',
-    priority: '急件',
+    priority: '急單',
     factory: 'Fab C',
     lab: '成分分析實驗室',
     status: 'Completed',
@@ -91,7 +115,7 @@ export const data = [
   },
   {
     serialNo: 'LabA-240505-006',
-    priority: '急件',
+    priority: '急單',
     factory: 'Fab C',
     lab: '成分分析實驗室',
     status: 'Completed',
@@ -106,7 +130,7 @@ export const data = [
   },
   {
     serialNo: 'LabA-240505-001',
-    priority: '急件',
+    priority: '急單',
     factory: 'Fab C',
     lab: '成分分析實驗室',
     status: 'Completed',
@@ -121,7 +145,7 @@ export const data = [
   },
   {
     serialNo: 'LabA-240505-001',
-    priority: '急件',
+    priority: '急單',
     factory: 'Fab C',
     lab: '成分分析實驗室',
     status: 'Completed',
@@ -136,7 +160,7 @@ export const data = [
   },
   {
     serialNo: '0004',
-    priority: '急件',
+    priority: '急單',
     factory: 'Fab C',
     lab: '成分分析實驗室',
     status: 'Completed',
@@ -151,7 +175,7 @@ export const data = [
   },
   {
     serialNo: '0004',
-    priority: '急件',
+    priority: '急單',
     factory: 'Fab C',
     lab: '成分分析實驗室',
     status: 'Completed',
@@ -166,7 +190,7 @@ export const data = [
   },
   {
     serialNo: '0004',
-    priority: '急件',
+    priority: '急單',
     factory: 'Fab C',
     lab: '成分分析實驗室',
     status: 'Completed',
@@ -181,7 +205,7 @@ export const data = [
   },
   {
     serialNo: '0004',
-    priority: '急件',
+    priority: '急單',
     factory: 'Fab C',
     lab: '成分分析實驗室',
     status: 'Completed',
@@ -196,7 +220,7 @@ export const data = [
   },
   {
     serialNo: '0004',
-    priority: '急件',
+    priority: '急單',
     factory: 'Fab C',
     lab: '成分分析實驗室',
     status: 'Completed',
