@@ -49,7 +49,7 @@ const closeAll = () => {
     <div class="relative overflow-y-auto text-sm">
       <ol class="flex flex-col gap-5 justify-between px-5"> 
         <li class="text-base text-blue-800 font-semibold">
-          {{ show.serialNo }}
+          {{ show.serialString }}
         </li>
         <li class="flex justify-between">
           <p>Priority</p>
@@ -76,14 +76,14 @@ const closeAll = () => {
         <li class="flex flex-col gap-5">
           <button @click="showHistory=!showHistory" type="button" class="flex items-center justify-between w-full font-medium rtl:text-right">
             <span>History</span>
-            <IconAccordion v-bind:class="{'rotate-0': showHistory}" class="text-gray-400"/>
+            <IconAccordion v-bind:class="{'rotate-180': showHistory}" class="text-gray-400"/>
           </button>
           <ItemHistory v-if="showHistory" :item="show"/>
         </li>
-        <li class="flex flex-col gap-5">
+        <li v-if="show.filePath" class="flex flex-col gap-5">
           <button @click="showAttach=!showAttach" type="button" class="flex items-center justify-between w-full font-medium rtl:text-right">
             <span>Attachment</span>
-            <IconAccordion v-bind:class="{'rotate-0': showAttach}" class="text-gray-400"/>
+            <IconAccordion v-bind:class="{'rotate-180': showAttach}" class="text-gray-400"/>
           </button>
           <ItemAttach v-if="showAttach" :files="show.filePath"/>
         </li>

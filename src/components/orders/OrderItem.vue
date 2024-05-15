@@ -17,7 +17,7 @@ const showDetail = defineModel('showDetail')
 
   <!-- Serial num -->
   <td class="p-2 items-center">
-    {{ item.serialNo }}
+    {{ item.serialString }}
   </td>
 
   <!-- Priority -->

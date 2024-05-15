@@ -40,7 +40,7 @@ const show = defineModel('show', {required: true})
           </label>
           <select id="factory" required class="text-gray-600 appearance-none cursor-pointer invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 hover:bg-gray-100/50 shadow-sm border text-sm rounded-lg p-2">
             <option value="" disabled selected>Select your fabrication</option>
-            <option v-for="val in dataTypes['factory']" :value="val.value">{{ val.name }}</option>
+            <option v-for="(display, name) in dataTypes['factory']" :value="name">{{ display }}</option>
           </select>
         </div>
         <div class="flex flex-col gap-1">
@@ -50,7 +50,7 @@ const show = defineModel('show', {required: true})
           </label>
           <select id="lab" required class="text-gray-600 appearance-none cursor-pointer invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 hover:bg-gray-100/50 shadow-sm border text-sm rounded-lg p-2">
             <option value="" disabled selected>Select the laboratory for the order</option>
-            <option v-for="val in dataTypes['lab']" :value="val.value">{{ val.name }}</option>
+            <option v-for="(display, name) in dataTypes['lab']" :value="name">{{ display }}</option>
           </select>
         </div>
         <div class="flex flex-col gap-1">
@@ -60,7 +60,7 @@ const show = defineModel('show', {required: true})
           </label>
           <select id="priority" required class="text-gray-600 appearance-none cursor-pointer invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 hover:bg-gray-100/50 shadow-sm border text-sm rounded-lg p-2">
             <option value="" disabled selected>Select the order priority</option>
-            <option v-for="val in dataTypes['priority']" :value="val.value">{{ val.name }}</option>
+            <option v-for="(display, name) in dataTypes['priority']" :value="name">{{ display }}</option>
           </select>
         </div>
         <div class="flex flex-col gap-1">

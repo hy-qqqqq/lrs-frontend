@@ -1,10 +1,9 @@
-export const columns = [
-  // TODO: serial no pattern
+export const headers = [
   // TODO: worker id pattern, ex: tsmc-faba-0001
-  'Serial No.',   // String: serialNo
-  'Priority',     // Select: 一般, 急單, 特急單
+  'Serial No.',   // String: serialString
+  'Priority',     // Select: regular, urgent, emergency
   'Fabrication',  // Select: Fab A, Fab B, Fab C
-  'Lab',          // Select: 化學實驗室, 表面分析實驗室, 成分分析實驗室
+  'Lab',          // Select: chemical, surface, composition
   'Start Time',   // String: createdAt (timestamp)
   'Update Time',  // String: (timestamp)
   'Issuer',       // String: createdBy (userID)
@@ -13,27 +12,28 @@ export const columns = [
 ]
 
 export const dataTypes = {
-  'priority': [
-    {name: '一般', value: 'regular'},
-    {name: '急單', value: 'urgent'},
-    {name: '特急單', value: 'emergency'}
-  ],
-  'factory': [
-    {name: 'Fab A', value: 'Fab A'},
-    {name: 'Fab B', value: 'Fab B'},
-    {name: 'Fab C', value: 'Fab C'}
-  ],
-  'lab': [
-    {name: '化學實驗室', value: 'chemical'},
-    {name: '表面分析實驗室', value: 'surface'},
-    {name: '成分分析實驗室', value: 'composition'}
-  ],
-  'status': [
-    {name: 'Issued', value: 'Issued'},
-    {name: 'Approved', value: 'Approved'}, 
-    {name: 'Completed', value: 'Completed'}, 
-    {name: 'Rejected', value: 'Rejected'}
-  ]
+  // { field: spec{ name: display } }
+  'priority': {
+    'regular': '一般',
+    'urgent': '急單',
+    'emergency': '特急單'
+  },
+  'factory': {
+    'Fab A': 'Fab A',
+    'Fab B': 'Fab B',
+    'Fab C': 'Fab C'
+  },
+  'lab': {
+    'chemical': '化學實驗室',
+    'surface': '表面分析實驗室',
+    'composition': '成分分析實驗室'
+  },
+  'status': {
+    'Issued': 'Issued',
+    'Approved': 'Approved',
+    'Completed': 'Completed',
+    'Rejected': 'Rejected'
+  }
 }
 
 // TODO: temporary mock data, need to remove later

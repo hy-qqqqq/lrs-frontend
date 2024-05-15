@@ -39,9 +39,9 @@ const updateFilter = (event) => {
     <div class="grow">
       <input id="approvedBy" class="w-full text-gray-600 appearance-none focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 shadow-sm border text-sm rounded-lg p-2" placeholder="Search for order serial number">
     </div>
-    <select v-for="(value, name) in dataTypes" @change="updateFilter($event)" :id="name" class="text-gray-600 cursor-pointer invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 hover:bg-gray-100/50 shadow-sm border text-sm rounded-lg p-2">
-      <option value="" selected>Filter {{ name }}</option>
-      <option v-for="val in value" :value="val.name">{{ val.name }}</option>
+    <select v-for="(spec, field) in dataTypes" @change="updateFilter($event)" :id="field" class="text-gray-600 cursor-pointer invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 hover:bg-gray-100/50 shadow-sm border text-sm rounded-lg p-2">
+      <option value="" selected>Filter {{ field }}</option>
+      <option v-for="(display, name) in spec" :value="name">{{ display }}</option>
     </select>
   </form>
 
