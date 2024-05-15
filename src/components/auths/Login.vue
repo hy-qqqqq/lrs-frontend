@@ -1,19 +1,34 @@
 <template>
-  <div class="login-container">
-    <p>Welcome to the login page!</p>
-    <form @submit.prevent="login">
-      <div class="form-group">
-        <label for="username">User ID:</label>
-        <input type="text" id="username" v-model="username" required>
+  <div class="h-screen grid grid-cols-2 justify-items-center items-center">
+    <div class="flex flex-row gap-8 items-center">
+      <img alt="Vue logo" class="logo" src="../../assets/logo.svg" width="125" height="125" />
+      <div>
+        <h1 class="green">Lab Requirements Management</h1>
+        <h3>
+          <a href="https://vitejs.dev/" target="_blank" rel="noopener">Vite</a> +
+          <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a> +
+          <a href="https://tailwindcss.com/" target="_blank" rel="noopener">Tailwind CSS</a>.
+        </h3>
       </div>
-      <div class="form-group">
-        <label for="password">Password:</label>
-        <input type="password" id="password" v-model="password" required>
-      </div>
-      <button type="submit">Log In</button>
-    </form>
+    </div>
+    <div class="login-container">
+      <p class="login-title">Login</p>
+      <form @submit.prevent="login" class="login-form">
+        <div class="form-group">
+          <label for="username">User ID:</label>
+          <input type="text" id="username" v-model="username" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password:</label>
+          <input type="password" id="password" v-model="password" required>
+        </div>
+        <button type="submit" class="login-button">Log In</button>
+        <button type="button" @click="navigateToRegister" class="register-button">Register</button>
+      </form>
+    </div>
   </div>
 </template>
+
 
 
 <script>
@@ -59,6 +74,9 @@ export default {
       // Clear username and password fields after submission
       this.username = '';
       this.password = '';
+    },
+    navigateToRegister() {
+      this.$router.push({ path: '/register' }); // Navigate to the register page
     }
   }
 };
