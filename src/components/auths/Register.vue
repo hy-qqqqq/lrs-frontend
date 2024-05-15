@@ -12,7 +12,7 @@
         </div>
       </div>
     <div class="register-container">
-      <h2>Register</h2>
+      <p class="register-title">Register</p>
       <form @submit.prevent="register" class="register-form">
         <div class="form-group">
           <label for="userID">User ID:</label>
@@ -29,9 +29,9 @@
             <option value="Fab A">Fab A</option>
             <option value="Fab B">Fab B</option>
             <option value="Fab C">Fab C</option>
-            <option value="化學實驗室">化學實驗室</option>
-            <option value="表面分析實驗室">表面分析實驗室</option>
-            <option value="成分分析實驗室">成分分析實驗室</option>
+            <option value="chemical">化學實驗室</option>
+            <option value="surface">表面分析實驗室</option>
+            <option value="composition">成分分析實驗室</option>
           </select>
         </div>
         <button type="submit">Register</button>

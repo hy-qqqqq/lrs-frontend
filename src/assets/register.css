@@ -6,6 +6,11 @@
     border-radius: 5px;
     background-color: #f9f9f9;
   }
+
+  .register-title {
+    font-size: 28px;
+    font-weight: bold;
+  }
   
   .register-form {
     display: flex;
