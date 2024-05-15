@@ -16,7 +16,6 @@
 </template>
 
 
-
 <script>
 import axios from 'axios';
 
@@ -46,7 +45,10 @@ export default {
         .then(response => {
           // Handle successful login
           console.log(response.data);
+          const userToken = response.data.token;
+          sessionStorage.setItem('token', userToken); // Store token in sessionStorage
           alert('Login successful!'); // You can redirect or perform other actions here
+          this.$router.push({ path: '/order' }); // Navigate to the "hello" page
         })
         .catch(error => {
           // Handle login error
@@ -61,6 +63,7 @@ export default {
   }
 };
 </script>
+
 
 
 <style scoped>
