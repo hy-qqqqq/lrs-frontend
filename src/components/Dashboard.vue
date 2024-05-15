@@ -1,79 +1,128 @@
-<template>
-  <div class="dashboard">
-    <div class="main-content">
-      <div class="header">
-        <!-- Header content goes here -->
-      </div>
-      <div class="charts">
-        <div class="order-charts">
-          <div class="chart">
-            <h2>Issued orders</h2>
-            <p>Example text for issued orders...</p>
-            <canvas id="issued"></canvas>
-          </div>
-          <div class="chart" style="margin-top: 20px;">
-            <h2>Approved orders</h2>
-            <p>Example text for approved orders...</p>
-            <canvas id="approved"></canvas>
-          </div>
-        </div>
-        <div class="order-charts" style="margin-left: 20px;">
-          <div class="chart">
-            <h2>Completed orders</h2>
-            <p>Example text for completed orders...</p>
-            <canvas id="completed"></canvas>
-          </div>
-          <div class="chart" style="margin-top: 20px;">
-            <h2>Rejected orders</h2>
-            <p>Example text for rejected orders...</p>
-            <canvas id="rejected"></canvas>
-          </div>
-        </div>
-        <div class="chart pie-chart" style="margin-left: 20px;">
-          <h2>Used Space Capacity</h2>
-          <canvas id="usedSpaceChart"></canvas>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
+<script setup>
+import { ref, reactive } from "vue";
+import Chart from 'chart.js/auto';
+import ApexCharts from 'apexcharts';
+// Components
+import Sidebar from './Sidebar.vue'
+</script>
 
 <script>
-import Chart from 'chart.js/auto';
-
 export default {
   mounted() {
-    // Initialize and update charts here using chart.js or any other charting library
     this.initializeCharts();
   },
   methods: {
     initializeCharts() {
-      // Initialize and update chart for orders 1
-      const ordersChart1Ctx = document.getElementById('issued').getContext('2d');
-      const ordersChart1 = new Chart(ordersChart1Ctx, {
-        // Chart configuration for orders 1
+      // Initialize and update charts for orders
+      this.initializePriorityCharts();
+      this.initializeFactoryCharts();
+      this.initializeLabCharts();
+      this.initializePieCharts();
+      this.initializeDonutCharts();
+    },
+    initializePriorityCharts() {
+      // Initialize and update charts based on priority
+      const priorityChartCtx = document.getElementById('priorityChart').getContext('2d');
+      const priorityChart = new Chart(priorityChartCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Issued', 'Rejected', 'Completed', 'Approved'],
+          datasets: [
+            { label: 'Normal', data: [5, 3, 7, 9], backgroundColor: 'rgba(255, 99, 132, 0.6)' },
+            { label: 'Urgent', data: [3, 2, 5, 6], backgroundColor: 'rgba(54, 162, 235, 0.6)' },
+            { label: 'Emergency', data: [2, 1, 3, 4], backgroundColor: 'rgba(255, 206, 86, 0.6)' }
+          ]
+        },
+        options: {
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
       });
+    },
+    initializeFactoryCharts() {
+      // Initialize and update charts based on factory
+      const factoryChartOptions = {
+        chart: {
+          height: 380,
+          type: 'bar',
+          stacked: true
+        },
+        plotOptions: {
+          bar: {
+            columnWidth: '30%',
+            horizontal: false,
+          },
+        },
+        series: [{
+          name: 'Fab A',
+          data: [14, 25, 21, 17],
+          color: 'rgba(255, 99, 132, 0.6)'
+        }, {
+          name: 'Fab B',
+          data: [13, 23, 20, 8],
+          color: 'rgba(54, 162, 235, 0.6)'
+        }, {
+          name: 'Fab C',
+          data: [11, 17, 15, 15],
+          color: 'rgba(255, 206, 86, 0.6)'
+        }],
+        xaxis: {
+          categories: ['Issued', 'Rejected', 'Completed', 'Approved'],
+        },
+        fill: {
+          opacity: 1
+        },
+      };
 
-      // Initialize and update chart for orders 2
-      const ordersChart2Ctx = document.getElementById('approved').getContext('2d');
-      const ordersChart2 = new Chart(ordersChart2Ctx, {
-        // Chart configuration for orders 2
-      });
+      const factoryChart = new ApexCharts(document.querySelector("#factoryChart"), factoryChartOptions);
+      factoryChart.render();
+    },
+    initializeLabCharts() {
+      // Initialize and update charts based on lab
+      const labChartOptions = {
+        chart: {
+          height: 380,
+          type: 'bar',
+          stacked: true
+        },
+        plotOptions: {
+          bar: {
+            columnWidth: '30%',
+            horizontal: false,
+          },
+        },
+        series: [
+          {
+            name: 'Chemistry Lab',
+            data: [8, 4, 10, 15],
+            color: 'rgba(255, 99, 132, 0.6)'
+          },
+          {
+            name: 'Surface Analysis Lab',
+            data: [6, 3, 8, 12],
+            color: 'rgba(54, 162, 235, 0.6)'
+          },
+          {
+            name: 'Composition Analysis Lab',
+            data: [4, 2, 6, 10],
+            color: 'rgba(255, 206, 86, 0.6)'
+          }
+        ],
+        xaxis: {
+          categories: ['Issued', 'Rejected', 'Completed', 'Approved'],
+        },
+        fill: {
+          opacity: 1
+        },
+      };
 
-      // Initialize and update chart for orders 3
-      const ordersChart3Ctx = document.getElementById('completed').getContext('2d');
-      const ordersChart3 = new Chart(ordersChart3Ctx, {
-        // Chart configuration for orders 3
-      });
+      const labChart = new ApexCharts(document.querySelector("#labChart"), labChartOptions);
+      labChart.render();
+    },
 
-      // Initialize and update chart for orders 4
-      const ordersChart4Ctx = document.getElementById('rejected').getContext('2d');
-      const ordersChart4 = new Chart(ordersChart4Ctx, {
-        // Chart configuration for orders 4
-      });
-
-      // Add more chart initializations as needed
-      // Initialize and update chart for used space capacity
+    initializePieCharts() {
+      // Initialize and update overall charts for issued, rejected, completed, approved
       // Initialize and update chart for used space capacity
       const usedSpaceChartCtx = document.getElementById('usedSpaceChart').getContext('2d');
       const usedSpaceChart = new Chart(usedSpaceChartCtx, {
@@ -89,51 +138,105 @@ export default {
             ],
           }],
         },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false, // Prevent the chart from maintaining aspect ratio
+        },
       });
-
+    },
+    initializeDonutCharts() {
+      // Initialize and update overall charts for issued, rejected, completed, approved
+      // Initialize and update chart for used space capacity
+      const donutOptions = {
+        chart: {
+          type: 'donut',
+          width: '100%',
+          height: 250,
+        },
+        dataLabels: {
+          enabled: false,
+        },
+        plotOptions: {
+          pie: {
+            customScale: 0.8,
+            donut: {
+              size: '75%',
+            },
+            offsetY: 20,
+          },
+          stroke: {
+            colors: undefined
+          }
+        },
+        colors: ['rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(255, 206, 86, 0.6)', 'rgba(75, 192, 192, 0.6)'],
+        series: [25, 12, 35, 50], // Example data for Issued, Rejected, Completed, Approved
+        labels: ['Issued', 'Rejected', 'Completed', 'Approved'],
+        
+        legend: {
+          position: 'right',
+          offsetY: 80
+        },
+        title: {
+          text: `total counts: 18`,
+          position: 'up',
+          style: {
+            fontSize: '14px'
+          }
+        }
+      };
+      
+      const donutChart = new ApexCharts(document.querySelector("#donutChart"), donutOptions);
+      donutChart.render();
     }
   }
 }
 </script>
 
+<template>
+  <div>
+    <Sidebar />
+    <div class="m-6">
+      <div class="ml-64 flex flex-col gap-4">
+        <div class="flex justify-center">
+          <div class="chart" style="margin-top: 20px; margin-right: 20px; width: 300px; height: 300px;"> <!-- Adjust chart size -->
+            <h2>Overall Orders</h2>
+            <div id="donutChart"></div> <!-- Add a div to hold the ApexCharts donut chart -->
+          </div>
+          <div class="chart pie-chart" style="margin-top: 20px; width: 300px; height: 300px;">
+            <h2>Used Space Capacity</h2>
+            <canvas id="usedSpaceChart" style="padding: 20px;"></canvas>
+          </div>
+          <div class="chart" style="margin-top: 20px; margin-left: 20px; width: 300px; height: 300px;"> 
+            <h2>Chart</h2>
+            <canvas id="newChart"></canvas>
+          </div>
+        </div>
+        <div class="flex flex-row justify-between">
+          <div class="chart" style="margin-right: 20px;">
+            <h2>Priority</h2>
+            <canvas id="priorityChart" style="width: 200px; height: 150px;"></canvas> 
+          </div>
+          <div class="chart" style="margin-right: 20px;">
+            <h2>Factory</h2>
+            <div id="factoryChart"></div> 
+          </div>
+          <div class="chart">
+            <h2>Lab</h2>
+            <div id="labChart"></div> 
+          </div>
+        </div>
+        
+        <div class="flex justify-center">
+          <div class="chart" style="width: 60%;">
+            <h2>系統穩定性監測</h2>
+            <canvas id="systemStabilityChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <style scoped>
-.dashboard {
-  display: flex;
-  height: 100vh;
-}
-
-.main-content {
-  flex: 1;
-  padding: 20px;
-}
-
-.header {
-  /* Header styles */
-}
-
-.charts {
-  display: flex;
-  justify-content: space-between;
-}
-
-.order-charts {
-  display: flex;
-  flex-direction: column;
-}
-
-.order-charts + .order-charts {
-  margin-left: 20px; /* Add margin between each order-charts wrapper */
-}
-
-.chart {
-  flex: 1;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-}
-
-.pie-chart {
-  width: 10%; /* Adjust the width of the pie chart */
-  min-width: 100px; /* Set a minimum width for responsiveness */
-}
+@import '@/assets/dashboard.css';
 </style>
