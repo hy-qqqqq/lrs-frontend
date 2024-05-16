@@ -1,12 +1,79 @@
 <script setup>
 import { ref, reactive } from "vue";
-import Chart from 'chart.js/auto';
+import { Chart } from 'chart.js/auto'; // Correct import
 import ApexCharts from 'apexcharts';
+import axios from 'axios';
 // Components
 import Sidebar from './Sidebar.vue'
 </script>
 
+
 <script>
+// Define reactive variables
+const orderCounts = reactive({
+  total: 0
+});
+
+const spaceCounts = reactive({
+  usedSpace: 0
+});
+
+// Function to fetch order counts and used space
+const fetchData = async () => {
+  try {
+    const orderResponse = await axios.get('http://localhost:5001/api/count_order', {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`
+      }
+    });
+
+    const spaceResponse = await axios.get('http://localhost:5001/api/used_space', {
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`
+      }
+    });
+
+    orderCounts.total = Object.values(orderResponse.data).reduce((acc, curr) => acc + curr, 0);
+    spaceCounts.usedSpace = parseInt(spaceResponse.data.used);
+    const totalSpace = spaceCounts.usedSpace * 3; // Assume total space is three times the used space
+
+    // Initialize pie chart for used space
+    initializePieCharts(spaceCounts.usedSpace, totalSpace);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+
+// Fetch data on component mount
+fetchData();
+
+// Define the initializePieCharts function
+const initializePieCharts = (usedSpace, totalSpace) => {
+  // Initialize and update chart for used space capacity
+  const remainingSpace = totalSpace - usedSpace;
+  const usedSpaceChartCtx = document.getElementById('usedSpaceChart').getContext('2d');
+  const usedSpaceChart = new Chart(usedSpaceChartCtx, {
+    type: 'pie',
+    data: {
+      labels: ['Used Space', 'Remaining Space'],
+      datasets: [{
+        label: 'Storage Capacity',
+        data: [usedSpace, remainingSpace],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+        ],
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false, // Prevent the chart from maintaining aspect ratio
+    },
+  });
+};
+
+
+
 export default {
   mounted() {
     this.initializeCharts();
@@ -17,7 +84,7 @@ export default {
       this.initializePriorityCharts();
       this.initializeFactoryCharts();
       this.initializeLabCharts();
-      this.initializePieCharts();
+      //this.initializePieCharts();
       this.initializeDonutCharts();
     },
     initializePriorityCharts() {
@@ -120,30 +187,6 @@ export default {
       const labChart = new ApexCharts(document.querySelector("#labChart"), labChartOptions);
       labChart.render();
     },
-
-    initializePieCharts() {
-      // Initialize and update overall charts for issued, rejected, completed, approved
-      // Initialize and update chart for used space capacity
-      const usedSpaceChartCtx = document.getElementById('usedSpaceChart').getContext('2d');
-      const usedSpaceChart = new Chart(usedSpaceChartCtx, {
-        type: 'pie',
-        data: {
-          labels: ['Used Space', 'Remaining Space'],
-          datasets: [{
-            label: 'Storage Capacity',
-            data: [70, 30], // Example data, replace with actual data
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.6)',
-              'rgba(54, 162, 235, 0.6)',
-            ],
-          }],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false, // Prevent the chart from maintaining aspect ratio
-        },
-      });
-    },
     initializeDonutCharts() {
       // Initialize and update overall charts for issued, rejected, completed, approved
       // Initialize and update chart for used space capacity
@@ -177,7 +220,7 @@ export default {
           offsetY: 80
         },
         title: {
-          text: `total counts: 18`,
+          text: `total counts: ${orderCounts.total}`,
           position: 'up',
           style: {
             fontSize: '14px'
@@ -206,10 +249,7 @@ export default {
             <h2>Used Space Capacity</h2>
             <canvas id="usedSpaceChart" style="padding: 20px;"></canvas>
           </div>
-          <div class="chart" style="margin-top: 20px; margin-left: 20px; width: 300px; height: 300px;"> 
-            <h2>Chart</h2>
-            <canvas id="newChart"></canvas>
-          </div>
+          <!-- Removed unused canvas element -->
         </div>
         <div class="flex flex-row justify-between">
           <div class="chart" style="margin-right: 20px;">
