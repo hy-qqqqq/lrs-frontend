@@ -1,21 +1,23 @@
 <script setup>
-import { ref, reactive } from "vue";
-import { data, columns } from './data/order.spec.js'
+import { ref } from "vue";
 // Components
 import OrderTable from './orders/OrderTable.vue'
 import Sidebar from './Sidebar.vue'
-import AddOrder from "./orders/AddOrder.vue";
+import AddOrder from './orders/AddOrder.vue'
+import Alert from './utils/Alert.vue'
 // Variables
-const items = ref(data) // TODO: replace mocked data with fetch
-const headers = ref(columns)
 const showAdd = ref(false)
+const showAlert = ref({show: false})
+const keyReload = ref(0)
 </script>
 
 <template>
   <Sidebar />
   <div class="m-6">
     <div class="ml-64 flex flex-col gap-4">
-      <div class="flex flex-row justify-between">
+      <AddOrder v-model:show="showAdd" v-model:keyReload="keyReload" v-model:showAlert="showAlert"/>
+      <Alert v-model:show="showAlert"/>
+      <div class="flex flex-row justify-between border-b pb-3 drop-shadow-sm">
         <h1>
           Order
         </h1>
@@ -23,8 +25,9 @@ const showAdd = ref(false)
           Add Order
         </button>
       </div>
-      <AddOrder v-model:show="showAdd"/>  
-      <OrderTable :items="items" :headers="headers"/>
+      <Suspense>
+        <OrderTable :key="keyReload"/>
+      </Suspense>
     </div>
   </div>
 </template>

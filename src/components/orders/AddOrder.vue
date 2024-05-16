@@ -1,8 +1,23 @@
 <script setup>
 // Imports
 import { dataTypes } from '../data/order.spec.js'
+import { addOrders } from '@/utils/service.js'
 // Defines
 const show = defineModel('show', {required: true})
+const showAlert = defineModel('showAlert', {required: true})
+const keyReload = defineModel('keyReload', {required: true})
+// Functions
+const handleSubmit = async (event) => {
+  const formData = new FormData(event.target)
+  if (event.target.file.files.length === 0) {
+    formData.delete('file')
+  }
+  addOrders(formData)
+    .then((res) => showAlert.value = {show: true, success: true, message: res.data.message})
+    .catch((err) => showAlert.value = {show: true, success: false, message: err})
+  show.value = false
+  keyReload.value += 1
+}
 </script>
 
 <template>
@@ -32,13 +47,13 @@ const show = defineModel('show', {required: true})
     </div>
     <!-- Modal body -->
     <div class="relative overflow-y-auto p-5 text-sm">
-      <form id="addForm" class="grid grid-cols-2 gap-4">
+      <form @submit.prevent="handleSubmit($event)" id="addForm" class="grid grid-cols-2 gap-4">
         <div class="flex flex-col gap-1">
           <label for="factory" class="font-semibold">
             Fabrication
             <abbr title="required" class="text-red-500">*</abbr>
           </label>
-          <select id="factory" required class="text-gray-600 appearance-none cursor-pointer invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 hover:bg-gray-100/50 shadow-sm border text-sm rounded-lg p-2">
+          <select id="factory" name="factory" required class="text-gray-600 appearance-none cursor-pointer invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 hover:bg-gray-100/50 shadow-sm border text-sm rounded-lg p-2">
             <option value="" disabled selected>Select your fabrication</option>
             <option v-for="(display, name) in dataTypes['factory']" :value="name">{{ display }}</option>
           </select>
@@ -48,7 +63,7 @@ const show = defineModel('show', {required: true})
             Laboratory
             <abbr title="required" class="text-red-500">*</abbr>
           </label>
-          <select id="lab" required class="text-gray-600 appearance-none cursor-pointer invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 hover:bg-gray-100/50 shadow-sm border text-sm rounded-lg p-2">
+          <select id="lab" name="lab" required class="text-gray-600 appearance-none cursor-pointer invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 hover:bg-gray-100/50 shadow-sm border text-sm rounded-lg p-2">
             <option value="" disabled selected>Select the laboratory for the order</option>
             <option v-for="(display, name) in dataTypes['lab']" :value="name">{{ display }}</option>
           </select>
@@ -58,18 +73,18 @@ const show = defineModel('show', {required: true})
             Priority
             <abbr title="required" class="text-red-500">*</abbr>
           </label>
-          <select id="priority" required class="text-gray-600 appearance-none cursor-pointer invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 hover:bg-gray-100/50 shadow-sm border text-sm rounded-lg p-2">
+          <select id="priority" name="priority" required class="text-gray-600 appearance-none cursor-pointer invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 hover:bg-gray-100/50 shadow-sm border text-sm rounded-lg p-2">
             <option value="" disabled selected>Select the order priority</option>
             <option v-for="(display, name) in dataTypes['priority']" :value="name">{{ display }}</option>
           </select>
         </div>
         <div class="flex flex-col gap-1">
           <label for="approvedBy" class="font-semibold">Approver</label>
-          <input id="approvedBy" class="text-gray-600 appearance-none focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 shadow-sm border text-sm rounded-lg p-2" placeholder="Type in the approver id">
+          <input id="approvedBy" name="approvedBy" class="text-gray-600 appearance-none focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 shadow-sm border text-sm rounded-lg p-2" placeholder="Type in the approver id">
         </div>
         <div class="col-span-2 flex flex-col gap-1">
           <label for="file" class="font-semibold">Attachments</label>
-          <input id="file" type="file" title="" multiple class="text-gray-600 border rounded-lg cursor-pointer shadow-sm focus:outline-none p-2
+          <input id="file" name="file" type="file" accept="image/png,image/jpeg,.pdf,.txt" title="" multiple class="text-gray-600 border rounded-lg cursor-pointer shadow-sm focus:outline-none p-2
             file:mr-4 file:py-2 file:px-4 file:rounded-md
             file:border-0 file:font-semibold
             file:bg-blue-50 file:text-blue-700

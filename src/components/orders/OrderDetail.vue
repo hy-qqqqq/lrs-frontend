@@ -32,7 +32,7 @@ const closeAll = () => {
 <!-- Main modal -->
 <div v-if="show!=false" @click="closeAll" id="detail-modal" class="overflow-y-auto overflow-x-hidden flex fixed z-50 justify-end items-start px-5 py-20 w-full inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-200/50 visible">
   <!-- Modal content -->
-  <div @click.stop="" class="flex flex-col relative bg-white rounded-lg shadow dark:bg-gray-700 gap-5 min-w-80 max-h-full">
+  <div @click.stop="" class="flex flex-col relative bg-white rounded-lg shadow dark:bg-gray-700 gap-5 max-h-full w-80">
     <!-- Modal header -->
     <div class="flex items-center justify-between p-5 shadow-sm">
       <h4 class="font-semibold text-gray-900 dark:text-white">
@@ -80,12 +80,12 @@ const closeAll = () => {
           </button>
           <ItemHistory v-if="showHistory" :item="show"/>
         </li>
-        <li v-if="show.filePath" class="flex flex-col gap-5">
+        <li v-if="show.allFilePaths" class="flex flex-col gap-5">
           <button @click="showAttach=!showAttach" type="button" class="flex items-center justify-between w-full font-medium rtl:text-right">
             <span>Attachment</span>
             <IconAccordion v-bind:class="{'rotate-180': showAttach}" class="text-gray-400"/>
           </button>
-          <ItemAttach v-if="showAttach" :files="show.filePath"/>
+          <ItemAttach v-if="showAttach" :files="show.allFilePaths"/>
         </li>
       </ol>
     </div>
