@@ -10,7 +10,7 @@ export const router = createRouter({
   history: createWebHistory(),
   routes: [
     {path: '/', name: 'auth', component: Auth},
-    {path: '/login', name: 'longin', component: Login},
+    {path: '/login', name: 'login', component: Login},
     {path: '/register', name: 'register', component: Register},
     {path: '/order', name: 'order', component: Order},
     {path: '/approval', name: 'approval', component: Approval},
