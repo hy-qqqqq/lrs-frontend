@@ -1,7 +1,7 @@
 <script setup>
 // Utilities
 import { ref } from 'vue'
-import { delOrders } from '@/utils/service'
+import { delOrders, approveOrders, completeOrders } from '@/utils/service'
 // Components
 import ItemHistory from './items/ItemHistory.vue'
 import ItemPriority from './items/ItemPriority.vue'
@@ -13,18 +13,29 @@ import Alert from '../utils/Alert.vue'
 const show = defineModel('show', {required: true})
 const showAttach = ref(false)
 const showHistory = ref(false)
-const showDelete = ref(false)
+const showConfirm = ref(false)
 const showAlert = ref({show: false})
 // Functions
 const closeAll = () => {
   show.value = false
   showAttach.value = false
   showHistory.value = false
-  showDelete.value = false
+  showConfirm.value = false
 }
 const handleDelete = async () => {
-  console.log(show.value.serialNo)
   delOrders(show.value.serialNo)
+    .then((res) => showAlert.value = {show: true, success: true, message: res.data.message})
+    .catch((err) => showAlert.value = {show: true, success: false, message: err})
+  closeAll()
+}
+const handleApprove = async (action) => {
+  approveOrders(show.value.serialNo, action)
+    .then((res) => showAlert.value = {show: true, success: true, message: res.data.message})
+    .catch((err) => showAlert.value = {show: true, success: false, message: err})
+  closeAll()
+}
+const handleComplete = async () => {
+  completeOrders(show.value.serialNo)
     .then((res) => showAlert.value = {show: true, success: true, message: res.data.message})
     .catch((err) => showAlert.value = {show: true, success: false, message: err})
   closeAll()
@@ -104,24 +115,39 @@ const handleDelete = async () => {
     </div>
     <!-- Modal control -->
     <div class="flex justify-end gap-1 p-5 border-t rounded-t">
-      <button @click="showDelete=true" class="border text-gray-500 border-gray-500 hover:bg-gray-500 hover:text-white font-medium rounded-lg text-sm px-3 py-2">
+      <button @click="showConfirm='delete'" class="border text-gray-500 border-gray-500 hover:bg-gray-500 hover:text-white font-medium rounded-lg text-sm px-3 py-2">
         Delete
       </button>
-      <button v-if="show.status=='Issued'" class="border text-white border-blue-700 bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-3 py-2">
+      <button v-if="show.status=='Issued' && show.approvedBy" @click="showConfirm='approve'" class="border text-white border-blue-700 bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-3 py-2">
         Approve 
       </button>
-      <button v-if="show.status=='Approved'" class="border text-white border-blue-700 bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-3 py-2">
+      <button v-else-if="show.status=='Approved' || (show.status=='Issued' && show.approvedBy=='')" @click="showConfirm='complete'" class="border text-white border-blue-700 bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-3 py-2">
         Complete
       </button>
     </div>
     <!-- Modal confirm -->
-    <div v-if="showDelete" @click="showDelete=false" class="fixed inset-0 flex items-center justify-center bg-gray-50/50">
-      <div @click.stop="" class="bg-black/70 rounded-lg p-5 flex flex-col gap-3 shadow-sm">
-        <p class="text-white font-bold">Are you sure to delete this order?</p>
-        <div class="flex justify-end gap-3">
-          <button @click="showDelete=false" class="text-gray-300">Cancel</button>
-          <button @click="handleDelete" class="text-blue-500">Confirm</button>
-        </div>
+    <div v-if="showConfirm" @click="showConfirm=false" class="fixed inset-0 flex items-center justify-center bg-gray-50/50">
+      <div v-if="showConfirm=='delete'" @click.stop="" class="bg-black/70 rounded-lg p-5 flex flex-col gap-3 shadow-sm">
+          <p class="text-white font-bold">Are you sure to delete this order?</p>
+          <div class="flex justify-end gap-3">
+            <button @click="showConfirm=false" class="text-gray-300">Cancel</button>
+            <button @click="handleDelete" class="text-blue-500">Confirm</button>
+          </div>
+      </div>
+      <div v-else-if="showConfirm=='approve'" @click.stop="" class="bg-black/70 rounded-lg p-5 flex flex-col gap-3 shadow-sm">
+          <p class="text-white font-bold">Are you sure to approve or reject this order?</p>
+          <div class="flex justify-end gap-3">
+            <button @click="showConfirm=false" class="text-gray-300">Cancel</button>
+            <button @click="handleApprove('Reject')" class="text-blue-500">Reject</button>
+            <button @click="handleApprove('Approve')" class="text-blue-500">Approve</button>
+          </div>
+      </div>
+      <div v-else-if="showConfirm=='complete'" @click.stop="" class="bg-black/70 rounded-lg p-5 flex flex-col gap-3 shadow-sm">
+          <p class="text-white font-bold">Are you sure to complete this order?</p>
+          <div class="flex justify-end gap-3">
+            <button @click="showConfirm=false" class="text-gray-300">Cancel</button>
+            <button @click="handleComplete" class="text-blue-500">Confirm</button>
+          </div>
       </div>
     </div>
   </div>

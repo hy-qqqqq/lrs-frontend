@@ -42,3 +42,27 @@ export const delOrders = async (id) => {
     return Promise.reject(`DELETE /api/orders ERROR: ${error}`)
   }
 }
+
+// Approve order
+export const approveOrders = async (id, action) => {
+  const data = {"action": action}
+  const conf = {headers: {'Content-Type': 'application/json'}}
+  try {
+    const res = await instance.post(`/api/approve_order/${id}`, data, conf)
+    return Promise.resolve(res)
+  } catch (error) {
+    const err = error.response ? error.response.data.error : error
+    return Promise.reject(`DELETE /api/orders ERROR: ${err}`)
+  }
+}
+
+// Complete order
+export const completeOrders = async (id) => {
+  try {
+    const res = await instance.post(`/api/complete_order/${id}`)
+    return Promise.resolve(res)
+  } catch (error) {
+    const err = error.response ? error.response.data.error : error
+    return Promise.reject(`DELETE /api/orders ERROR: ${err}`)
+  }
+}
