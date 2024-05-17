@@ -11,13 +11,16 @@ import Sidebar from './Sidebar.vue'
 const instance = axios.create({
   baseURL: 'http://localhost:5001',
   withCredentials: true,
-  timeout: 100,
+  timeout: 300,
 });
 
 export default {
   data() {
     return {
       usedSpaceChart: null,
+      priorityChart: null,
+      factoryChart: null,
+      labChart: null,
     };
   },
   mounted() {
@@ -38,108 +41,120 @@ export default {
       if (this.usedSpaceChart) {
         this.usedSpaceChart.destroy();
         this.usedSpaceChart = null;
+      };
+      if (this.priorityChart) this.priorityChart.destroy();
+      if (this.factoryChart) this.factoryChart.destroy();
+      if (this.labChart) this.labChart.destroy();
+    },
+
+    async initializePriorityCharts() {
+      try {
+        const response = await instance.get('/api/count_order_by_type');
+        const data = response.data;
+
+        const priorityData = {
+          regular: { Issued: 0, Rejected: 0, Completed: 0, Approved: 0 },
+          urgent: { Issued: 0, Rejected: 0, Completed: 0, Approved: 0 },
+          emergency: { Issued: 0, Rejected: 0, Completed: 0, Approved: 0 },
+        };
+
+        data.forEach(item => {
+          if (item.priority && priorityData[item.priority]) {
+            priorityData[item.priority] = item.count;
+          }
+        });
+
+        const priorityChartOptions = {
+          chart: { height: 380, type: 'bar', stacked: true },
+          plotOptions: { bar: { columnWidth: '30%', horizontal: false } },
+          series: [
+            { name: 'Regular', data: Object.values(priorityData.regular), color: 'rgba(255, 99, 132, 0.6)' },
+            { name: 'Urgent', data: Object.values(priorityData.urgent), color: 'rgba(54, 162, 235, 0.6)' },
+            { name: 'Emergency', data: Object.values(priorityData.emergency), color: 'rgba(255, 206, 86, 0.6)' },
+          ],
+          xaxis: { categories: ['Issued', 'Rejected', 'Completed', 'Approved'] },
+          fill: { opacity: 1 },
+        };
+
+        this.priorityChart = new ApexCharts(document.querySelector("#priorityChart"), priorityChartOptions);
+        this.priorityChart.render();
+      } catch (error) {
+        console.error('Failed to fetch priority data:', error);
       }
     },
-    initializePriorityCharts() {
-      // Initialize and update charts based on priority
-      const priorityChartCtx = document.getElementById('priorityChart').getContext('2d');
-      const priorityChart = new Chart(priorityChartCtx, {
-        type: 'bar',
-        data: {
-          labels: ['Issued', 'Rejected', 'Completed', 'Approved'],
-          datasets: [
-            { label: 'Normal', data: [5, 3, 7, 9], backgroundColor: 'rgba(255, 99, 132, 0.6)' },
-            { label: 'Urgent', data: [3, 2, 5, 6], backgroundColor: 'rgba(54, 162, 235, 0.6)' },
-            { label: 'Emergency', data: [2, 1, 3, 4], backgroundColor: 'rgba(255, 206, 86, 0.6)' }
-          ]
-        },
-        options: {
-          scales: {
-            y: { beginAtZero: true }
-          }
-        }
-      });
-    },
-    initializeFactoryCharts() {
-      // Initialize and update charts based on factory
-      const factoryChartOptions = {
-        chart: {
-          height: 380,
-          type: 'bar',
-          stacked: true
-        },
-        plotOptions: {
-          bar: {
-            columnWidth: '30%',
-            horizontal: false,
-          },
-        },
-        series: [{
-          name: 'Fab A',
-          data: [14, 25, 21, 17],
-          color: 'rgba(255, 99, 132, 0.6)'
-        }, {
-          name: 'Fab B',
-          data: [13, 23, 20, 8],
-          color: 'rgba(54, 162, 235, 0.6)'
-        }, {
-          name: 'Fab C',
-          data: [11, 17, 15, 15],
-          color: 'rgba(255, 206, 86, 0.6)'
-        }],
-        xaxis: {
-          categories: ['Issued', 'Rejected', 'Completed', 'Approved'],
-        },
-        fill: {
-          opacity: 1
-        },
-      };
+    async initializeFactoryCharts() {
+      try {
+        const response = await instance.get('/api/count_order_by_type');
+        const data = response.data;
 
-      const factoryChart = new ApexCharts(document.querySelector("#factoryChart"), factoryChartOptions);
-      factoryChart.render();
-    },
-    initializeLabCharts() {
-      // Initialize and update charts based on lab
-      const labChartOptions = {
-        chart: {
-          height: 380,
-          type: 'bar',
-          stacked: true
-        },
-        plotOptions: {
-          bar: {
-            columnWidth: '30%',
-            horizontal: false,
-          },
-        },
-        series: [
-          {
-            name: 'Chemistry Lab',
-            data: [8, 4, 10, 15],
-            color: 'rgba(255, 99, 132, 0.6)'
-          },
-          {
-            name: 'Surface Analysis Lab',
-            data: [6, 3, 8, 12],
-            color: 'rgba(54, 162, 235, 0.6)'
-          },
-          {
-            name: 'Composition Analysis Lab',
-            data: [4, 2, 6, 10],
-            color: 'rgba(255, 206, 86, 0.6)'
-          }
-        ],
-        xaxis: {
-          categories: ['Issued', 'Rejected', 'Completed', 'Approved'],
-        },
-        fill: {
-          opacity: 1
-        },
-      };
+        const factoryData = {
+          'Fab A': { Issued: 0, Rejected: 0, Completed: 0, Approved: 0 },
+          'Fab B': { Issued: 0, Rejected: 0, Completed: 0, Approved: 0 },
+          'Fab C': { Issued: 0, Rejected: 0, Completed: 0, Approved: 0 },
+        };
 
-      const labChart = new ApexCharts(document.querySelector("#labChart"), labChartOptions);
-      labChart.render();
+        data.forEach(item => {
+          if (item.factory && factoryData[item.factory]) {
+            factoryData[item.factory] = item.count;
+          }
+        });
+
+        const factoryChartOptions = {
+          chart: { height: 380, type: 'bar', stacked: true },
+          plotOptions: { bar: { columnWidth: '30%', horizontal: false } },
+          series: [
+            { name: 'Fab A', data: Object.values(factoryData['Fab A']), color: 'rgba(255, 99, 132, 0.6)' },
+            { name: 'Fab B', data: Object.values(factoryData['Fab B']), color: 'rgba(54, 162, 235, 0.6)' },
+            { name: 'Fab C', data: Object.values(factoryData['Fab C']), color: 'rgba(255, 206, 86, 0.6)' },
+          ],
+          xaxis: { categories: ['Issued', 'Rejected', 'Completed', 'Approved'] },
+          fill: { opacity: 1 },
+        };
+
+        this.factoryChart = new ApexCharts(document.querySelector("#factoryChart"), factoryChartOptions);
+        this.factoryChart.render();
+      } catch (error) {
+        console.error('Failed to fetch factory data:', error);
+      }
     },
+
+    async initializeLabCharts() {
+      try {
+        const response = await instance.get('/api/count_order_by_type');
+        const data = response.data;
+
+        const labData = {
+          chemical: { Issued: 0, Rejected: 0, Completed: 0, Approved: 0 },
+          surface: { Issued: 0, Rejected: 0, Completed: 0, Approved: 0 },
+          composition: { Issued: 0, Rejected: 0, Completed: 0, Approved: 0 },
+        };
+
+        data.forEach(item => {
+          if (item.lab && labData[item.lab]) {
+            labData[item.lab] = item.count;
+          }
+        });
+
+        const labChartOptions = {
+          chart: { height: 380, type: 'bar', stacked: true },
+          plotOptions: { bar: { columnWidth: '30%', horizontal: false } },
+          series: [
+            { name: 'Chemistry Lab', data: Object.values(labData.chemical), color: 'rgba(255, 99, 132, 0.6)' },
+            { name: 'Surface Analysis Lab', data: Object.values(labData.surface), color: 'rgba(54, 162, 235, 0.6)' },
+            { name: 'Composition Analysis Lab', data: Object.values(labData.composition), color: 'rgba(255, 206, 86, 0.6)' },
+          ],
+          xaxis: { categories: ['Issued', 'Rejected', 'Completed', 'Approved'] },
+          fill: { opacity: 1 },
+        };
+
+        this.labChart = new ApexCharts(document.querySelector("#labChart"), labChartOptions);
+        this.labChart.render();
+      } catch (error) {
+        console.error('Failed to fetch lab data:', error);
+      }
+    },
+
+
     initializeDonutCharts() {
       // Initialize chart options
       const donutOptions = {
@@ -267,7 +282,7 @@ export default {
         <div class="flex flex-row justify-between">
           <div class="chart" style="margin-right: 20px;">
             <h2>Priority</h2>
-            <canvas id="priorityChart" style="width: 200px; height: 150px;"></canvas> 
+            <div id="priorityChart"></div>
           </div>
           <div class="chart" style="margin-right: 20px;">
             <h2>Factory</h2>
