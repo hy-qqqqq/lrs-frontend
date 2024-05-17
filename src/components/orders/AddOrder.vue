@@ -1,11 +1,14 @@
 <script setup>
-// Imports
+// Utilities
+import { ref } from 'vue'
 import { dataTypes } from '../data/order.spec.js'
 import { addOrders } from '@/utils/service.js'
+// Components
+import Alert from '../utils/Alert.vue'
 // Defines
-const show = defineModel('show', {required: true})
-const showAlert = defineModel('showAlert', {required: true})
 const keyReload = defineModel('keyReload', {required: true})
+const show = defineModel('show', {required: true})
+const showAlert = ref({show: false})
 // Functions
 const handleSubmit = async (event) => {
   const formData = new FormData(event.target)
@@ -21,6 +24,8 @@ const handleSubmit = async (event) => {
 </script>
 
 <template>
+
+<Alert :show="showAlert"/>
 
 <transition
     enter-active-class="transition ease-out duration-150 transform"

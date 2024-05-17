@@ -1,16 +1,20 @@
 <script setup>
+// Utilities
 import { ref } from 'vue'
+import { delOrders } from '@/utils/service'
 // Components
 import ItemHistory from './items/ItemHistory.vue'
 import ItemPriority from './items/ItemPriority.vue'
 import ItemStatus from './items/ItemStatus.vue'
 import ItemAttach from './items/ItemAttach.vue'
 import IconAccordion from '../icons/IconAccordion.vue'
+import Alert from '../utils/Alert.vue'
 // Defines
 const show = defineModel('show', {required: true})
 const showAttach = ref(false)
 const showHistory = ref(false)
 const showDelete = ref(false)
+const showAlert = ref({show: false})
 // Functions
 const closeAll = () => {
   show.value = false
@@ -18,9 +22,18 @@ const closeAll = () => {
   showHistory.value = false
   showDelete.value = false
 }
+const handleDelete = async () => {
+  console.log(show.value.serialNo)
+  delOrders(show.value.serialNo)
+    .then((res) => showAlert.value = {show: true, success: true, message: res.data.message})
+    .catch((err) => showAlert.value = {show: true, success: false, message: err})
+  closeAll()
+}
 </script>
 
 <template>
+
+<Alert :show="showAlert"/>
 
 <transition
     enter-active-class="transition ease-out duration-150 transform"
@@ -100,6 +113,16 @@ const closeAll = () => {
       <button v-if="show.status=='Approved'" class="border text-white border-blue-700 bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-3 py-2">
         Complete
       </button>
+    </div>
+    <!-- Modal confirm -->
+    <div v-if="showDelete" @click="showDelete=false" class="fixed inset-0 flex items-center justify-center bg-gray-50/50">
+      <div @click.stop="" class="bg-black/70 rounded-lg p-5 flex flex-col gap-3 shadow-sm">
+        <p class="text-white font-bold">Are you sure to delete this order?</p>
+        <div class="flex justify-end gap-3">
+          <button @click="showDelete=false" class="text-gray-300">Cancel</button>
+          <button @click="handleDelete" class="text-blue-500">Confirm</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -16,9 +16,8 @@ export const getOrders = async () => {
   }
 }
 
-// Add orders
+// Add order
 export const addOrders = async (formData) => {
-  console.log(formData)
   try {
     const res = await instance.post(
       `/api/orders`,
@@ -30,5 +29,16 @@ export const addOrders = async (formData) => {
     return Promise.resolve(res)
   } catch (error) {
     return Promise.reject(`POST /api/orders ERROR: ${error}`)
+  }
+}
+
+// Delete order
+export const delOrders = async (id) => {
+  console.log(id)
+  try {
+    const res = await instance.delete(`/api/orders/${id}`)
+    return Promise.resolve(res)
+  } catch (error) {
+    return Promise.reject(`DELETE /api/orders ERROR: ${error}`)
   }
 }
