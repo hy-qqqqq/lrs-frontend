@@ -7,85 +7,38 @@ import axios from 'axios';
 import Sidebar from './Sidebar.vue'
 </script>
 
-
 <script>
-// Define reactive variables
-const orderCounts = reactive({
-  total: 0
+const instance = axios.create({
+  baseURL: 'http://localhost:5001',
+  withCredentials: true,
+  timeout: 100,
 });
-
-const spaceCounts = reactive({
-  usedSpace: 0
-});
-
-// Function to fetch order counts and used space
-const fetchData = async () => {
-  try {
-    const orderResponse = await axios.get('http://localhost:5001/api/count_order', {
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`
-      }
-    });
-
-    const spaceResponse = await axios.get('http://localhost:5001/api/used_space', {
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`
-      }
-    });
-
-    orderCounts.total = Object.values(orderResponse.data).reduce((acc, curr) => acc + curr, 0);
-    spaceCounts.usedSpace = parseInt(spaceResponse.data.used);
-    const totalSpace = spaceCounts.usedSpace * 3; // Assume total space is three times the used space
-
-    // Initialize pie chart for used space
-    initializePieCharts(spaceCounts.usedSpace, totalSpace);
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-};
-
-// Fetch data on component mount
-fetchData();
-
-// Define the initializePieCharts function
-const initializePieCharts = (usedSpace, totalSpace) => {
-  // Initialize and update chart for used space capacity
-  const remainingSpace = totalSpace - usedSpace;
-  const usedSpaceChartCtx = document.getElementById('usedSpaceChart').getContext('2d');
-  const usedSpaceChart = new Chart(usedSpaceChartCtx, {
-    type: 'pie',
-    data: {
-      labels: ['Used Space', 'Remaining Space'],
-      datasets: [{
-        label: 'Storage Capacity',
-        data: [usedSpace, remainingSpace],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.6)',
-          'rgba(54, 162, 235, 0.6)',
-        ],
-      }],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false, // Prevent the chart from maintaining aspect ratio
-    },
-  });
-};
-
-
 
 export default {
+  data() {
+    return {
+      usedSpaceChart: null,
+    };
+  },
   mounted() {
     this.initializeCharts();
   },
+  beforeUnmount() {
+    this.destroyCharts();
+  },
   methods: {
     initializeCharts() {
-      // Initialize and update charts for orders
+      this.fetchUsedSpace();
       this.initializePriorityCharts();
       this.initializeFactoryCharts();
       this.initializeLabCharts();
-      //this.initializePieCharts();
       this.initializeDonutCharts();
+    },
+    destroyCharts() {
+      if (this.usedSpaceChart) {
+        this.usedSpaceChart.destroy();
+        this.usedSpaceChart = null;
+      }
     },
     initializePriorityCharts() {
       // Initialize and update charts based on priority
@@ -188,8 +141,7 @@ export default {
       labChart.render();
     },
     initializeDonutCharts() {
-      // Initialize and update overall charts for issued, rejected, completed, approved
-      // Initialize and update chart for used space capacity
+      // Initialize chart options
       const donutOptions = {
         chart: {
           type: 'donut',
@@ -212,15 +164,14 @@ export default {
           }
         },
         colors: ['rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(255, 206, 86, 0.6)', 'rgba(75, 192, 192, 0.6)'],
-        series: [25, 12, 35, 50], // Example data for Issued, Rejected, Completed, Approved
+        series: [], // Initialize with empty array
         labels: ['Issued', 'Rejected', 'Completed', 'Approved'],
-        
         legend: {
           position: 'right',
           offsetY: 80
         },
         title: {
-          text: `total counts: ${orderCounts.total}`,
+          text: 'Total counts: 0', // Initialize with zero
           position: 'up',
           style: {
             fontSize: '14px'
@@ -230,10 +181,72 @@ export default {
       
       const donutChart = new ApexCharts(document.querySelector("#donutChart"), donutOptions);
       donutChart.render();
+
+      // Fetch data from the backend and update the chart
+      instance.get('/api/count_order_by_status')
+        .then(response => {
+          const data = response.data;
+          donutChart.updateSeries([
+            data.Issued,
+            data.Rejected,
+            data.Completed,
+            data.Approved
+          ]);
+          donutChart.updateOptions({
+            title: {
+              text: `Total counts: ${data.Issued + data.Rejected + data.Completed + data.Approved}`
+            }
+          });
+        })
+        .catch(error => {
+          console.error(error);
+          alert('Failed to fetch order counts.');
+        });
+    },
+    initializePieCharts(usedSpace, totalSpace) {
+      // Initialize and update chart for used space capacity
+      this.destroyCharts(); // Ensure any existing chart is destroyed before creating a new one
+      const remainingSpace = totalSpace - usedSpace;
+      const usedSpaceChartCtx = document.getElementById('usedSpaceChart').getContext('2d');
+      this.usedSpaceChart = new Chart(usedSpaceChartCtx, {
+        type: 'pie',
+        data: {
+          labels: ['Used Space', 'Remaining Space'],
+          datasets: [{
+            label: 'Storage Capacity',
+            data: [usedSpace, remainingSpace],
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.6)',
+              'rgba(54, 162, 235, 0.6)',
+            ],
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false, // Prevent the chart from maintaining aspect ratio
+        },
+      });
+    },
+    fetchUsedSpace() {
+      const totalSpace = 100;
+      instance.get('/api/used_space')
+        .then(response => {
+          console.log('Response data:', response.data); // Add logging
+          const usedSpace = parseInt(response.data.used, 10);
+          if (isNaN(usedSpace)) {
+            throw new Error('Invalid used space value');
+          }
+          this.initializePieCharts(usedSpace, totalSpace);
+        })
+        .catch(error => {
+          console.error('Failed to fetch used space data:', error);
+          alert('Failed to fetch used space data.');
+        });
     }
   }
 }
 </script>
+
 
 <template>
   <div>
