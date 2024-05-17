@@ -9,6 +9,7 @@ import OrderDetail from './OrderDetail.vue'
 // Hooks
 onMounted(async () => {
   // fetch orders
+  loading.value = true
   const { data } = await getOrders()
   // preprocess display names
   data.map(function (d) {
@@ -21,45 +22,85 @@ onMounted(async () => {
 })
 // Variables
 const items = ref()
+const search = ref('')
+const loading = ref(false)
 const showDetail = ref(false)
 const itemFilter = ref({})
 const computedItems = computed(() => {
+  loading.value = true
   let res = items.value
   Object.entries(itemFilter.value).forEach(([k, v]) => {
     if (v) {
       res = res.filter(item => item[k] == v)
     }
   })
+  loading.value = false
   return res
 })
 // Functions
-const updateFilter = (event) => {
-  itemFilter.value[event.target.id] = event.target.value
+const defaultFilter = (value, query, item) => {
+  if (value == null || query == null) return -1
+  return value.toString().toLocaleLowerCase().indexOf(query.toString().toLocaleLowerCase())
+}
+const customKeyFilter = {
+    'createdAt': (v, q, i) => true,
+    'updatedAt': (v, q, i) => true
 }
 </script>
 
 <template>
   <OrderDetail v-model:show="showDetail"/>
-  <form id="filterForm" class="flex flex-row gap-5">
+  <form @submit.prevent="" id="filterForm" class="flex flex-row gap-5">
     <div class="grow">
-      <input id="approvedBy" class="w-full text-gray-600 appearance-none focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 shadow-sm border text-sm rounded-lg p-2" placeholder="Search for order serial number">
+      <v-text-field 
+        v-model="search" 
+        label="Type to search..." 
+        density="compact"
+        variant="outlined"
+        hide-details
+        clearable
+      ></v-text-field>
     </div>
-    <select v-for="(spec, field) in dataTypes" @change="updateFilter($event)" :id="field" class="text-gray-600 cursor-pointer invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 hover:bg-gray-100/50 shadow-sm border text-sm rounded-lg p-2">
-      <option value="" selected>Filter {{ field }}</option>
-      <option v-for="(display) in spec" :value="display">{{ display }}</option>
-    </select>
+    <v-select
+      v-for="(spec, field) in dataTypes" v-model="itemFilter[field]"
+      :label="'Select '+ field"
+      :items="Object.values(spec)"
+      density="compact"
+      variant="outlined"
+      height="10"
+      hide-details
+      clearable
+      class="max-w-40"
+    ></v-select>
   </form>
 
-  <table class="w-full table-auto text-left leading-loose">
-    <thead>
-      <tr class="bg-gray-100 capitalize">
-        <th class="font-bold p-2" v-for="(header, index) in headers" :key="index">{{ header }}</th>
+  <v-data-table
+    :headers="headers"
+    :items="computedItems"
+    :search="search"
+    :itemsPerPage="-1"
+    :header-props="{ class: 'bg-gray-100 capitalize sticky top-0' }"
+    :sort-by="[{ key: 'priority', order: 'desc' }]"
+    :loading="loading"
+    :custom-filter="defaultFilter"
+    :custom-key-filter="customKeyFilter"
+    item-value="serialString"
+    hide-default-footer
+    class="shadow-sm max-h-[650px]"
+  >
+    <template v-slot:item="{ item }">
+      <tr class="transition-all duration-500 hover:bg-gray-50 text-gray-500">
+        <OrderItem :item="item" v-model:showDetail="showDetail"/>
       </tr>
-    </thead>
-    <tbody class="text-gray-500">
-      <tr class="transition-all duration-500 hover:bg-gray-50" v-for="(item, index) in computedItems" :key="index">
-        <OrderItem v-model:showDetail="showDetail" :item="item"/>
-      </tr>
-    </tbody>
-  </table>
+    </template>
+  </v-data-table>
 </template>
+
+<style lang="css">
+div.v-list-item__content > div.v-list-item-title {
+  font-size: 0.9em;
+}
+div.v-list-item--density-default.v-list-item--one-line {
+  min-height: 14px;
+}
+</style>

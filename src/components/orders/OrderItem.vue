@@ -60,12 +60,10 @@ const showDetail = defineModel('showDetail')
   </td>
 
   <!-- Action -->
-  <td class="p-2">
-    <div class="h-full flex gap-1">
-      <button @click="showDetail=item" type="button" class="p-2 text-blue-700 cursor-pointer flex item-center">
-        Details
-      </button>
-    </div>
+  <td class="p-2 text-blue-700">
+    <button @click="showDetail=item" type="button" class="cursor-pointer">
+      Details
+    </button>
   </td>
 
 </template>
