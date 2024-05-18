@@ -66,3 +66,16 @@ export const completeOrders = async (id) => {
     return Promise.reject(`DELETE /api/orders ERROR: ${err}`)
   }
 }
+
+// Download file
+export const downloadFile = async (filePath) => {
+  const data = {"filePath": filePath}
+  const conf = {headers: {'Content-Type': 'application/json'}, responseType: 'blob'}
+  try {
+    const res = await instance.post(`/api/download`, data, conf)
+    return Promise.resolve(res)
+  } catch (error) {
+    const err = error.response ? error.response.data.error : error
+    return Promise.reject(`POST /api/download ERROR: ${err}`)
+  }
+}
