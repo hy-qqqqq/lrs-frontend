@@ -1,6 +1,4 @@
 <script setup>
-// Components
-import IconCalendar from '../../icons/IconCalendar.vue'
 // Defines
 const item = defineModel('item', {required: true})
 </script>
@@ -9,7 +7,7 @@ const item = defineModel('item', {required: true})
   <ol class="flex flex-col relative border-s border-gray-200 dark:border-gray-600 ms-4 gap-5">                  
     <li v-if="item.status=='Completed'" class="ms-8">            
       <span class="absolute flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full -start-3.5 ring-8 ring-white dark:ring-gray-700 dark:bg-gray-600">
-        <IconCalendar />
+        <v-icon icon="mdi-calendar-month-outline" size="x-small" color="grey-darken-1"></v-icon>
       </span>
       <p class="mb-1 text-gray-900 dark:text-white">
         Completed by {{ item.completedBy }}
@@ -20,7 +18,7 @@ const item = defineModel('item', {required: true})
     </li>
     <li v-if="item.status=='Completed'||item.status=='Approved'" class="ms-8">
       <span class="absolute flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full -start-3.5 ring-8 ring-white dark:ring-gray-700 dark:bg-gray-600">
-        <IconCalendar />
+        <v-icon icon="mdi-calendar-month-outline" size="x-small" color="grey-darken-1"></v-icon>
       </span>
       <p class="mb-1 text-gray-900 dark:text-white">
         Approved by {{ item.approvedBy }}
@@ -31,7 +29,7 @@ const item = defineModel('item', {required: true})
     </li>
     <li v-else-if="item.status=='Rejected'" class="ms-8">
       <span class="absolute flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full -start-3.5 ring-8 ring-white dark:ring-gray-700 dark:bg-gray-600">
-        <IconCalendar />
+        <v-icon icon="mdi-calendar-month-outline" size="x-small" color="grey-darken-1"></v-icon>
       </span>
       <p class="mb-1 text-gray-900 dark:text-white">
         Rejected by {{ item.approvedBy }}
@@ -42,7 +40,7 @@ const item = defineModel('item', {required: true})
     </li>
     <li class="ms-8">
       <span class="absolute flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full -start-3.5 ring-8 ring-white dark:ring-gray-700 dark:bg-gray-600">
-        <IconCalendar />
+        <v-icon icon="mdi-calendar-month-outline" size="x-small" color="grey-darken-1"></v-icon>
       </span>
       <p class="mb-1 text-gray-900 dark:text-white">
         Created by {{ item.createdBy }}

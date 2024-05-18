@@ -3,7 +3,6 @@
 import { ref } from 'vue'
 import { downloadFile } from '@/utils/service'
 // Components
-import IconDownload from '../../icons/IconDownload.vue'
 import Alert from '@/components/utils/Alert.vue'
 // Defines
 defineProps({
@@ -33,7 +32,7 @@ const handleDownload = (file) => {
   <ol class="flex flex-col relative ms-4 gap-5">                  
     <li v-for="(file, index) in files" :key="index" class="ms-8">            
       <span @click="handleDownload(file)" class="cursor-pointer hover:animate-bounce absolute flex items-center justify-center w-6 h-6 bg-gray-100 rounded-full -start-3.5 ring-8 ring-white dark:ring-gray-700 dark:bg-gray-600">
-        <IconDownload />
+        <v-icon icon="mdi-tray-arrow-down" size="x-small" color="grey-darken-1"></v-icon>
       </span>
       <p class="mb-1 dark:text-white truncate" :value="file">
         {{ file.split("/")[2] }}

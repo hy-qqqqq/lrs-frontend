@@ -7,7 +7,6 @@ import { dataTypes } from '../data/order.spec'
 import ItemHistory from './items/ItemHistory.vue'
 import ItemStatus from './items/ItemStatus.vue'
 import ItemAttach from './items/ItemAttach.vue'
-import IconAccordion from '../icons/IconAccordion.vue'
 import Alert from '../utils/Alert.vue'
 // Defines
 const show = defineModel('show', {required: true})
@@ -112,14 +111,14 @@ const handleUpdate = async (event) => {
         <li class="flex flex-col gap-5">
           <button @click="showHistory=!showHistory" type="button" class="flex items-center justify-between w-full font-medium rtl:text-right">
             <span>History</span>
-            <IconAccordion v-bind:class="{'rotate-180': showHistory}" class="text-gray-400"/>
+            <v-icon v-bind:class="{'rotate-180': showHistory}" icon="mdi-chevron-down" color="grey-darken-1"></v-icon>
           </button>
           <ItemHistory v-if="showHistory" :item="show"/>
         </li>
         <li v-if="show.allFilePaths" class="flex flex-col gap-5">
           <button @click="showAttach=!showAttach" type="button" class="flex items-center justify-between w-full font-medium rtl:text-right">
             <span>Attachment</span>
-            <IconAccordion v-bind:class="{'rotate-180': showAttach}" class="text-gray-400"/>
+            <v-icon v-bind:class="{'rotate-180': showHistory}" icon="mdi-chevron-down" color="grey-darken-1"></v-icon>
           </button>
           <ItemAttach v-if="showAttach" :files="show.allFilePaths"/>
         </li>
