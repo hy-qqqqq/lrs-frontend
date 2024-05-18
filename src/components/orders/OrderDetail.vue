@@ -1,10 +1,10 @@
 <script setup>
 // Utilities
 import { ref } from 'vue'
-import { delOrders, approveOrders, completeOrders } from '@/utils/service'
+import { delOrders, approveOrders, completeOrders, updateOrders } from '@/utils/service'
+import { dataTypes } from '../data/order.spec'
 // Components
 import ItemHistory from './items/ItemHistory.vue'
-import ItemPriority from './items/ItemPriority.vue'
 import ItemStatus from './items/ItemStatus.vue'
 import ItemAttach from './items/ItemAttach.vue'
 import IconAccordion from '../icons/IconAccordion.vue'
@@ -36,6 +36,12 @@ const handleApprove = async (action) => {
 }
 const handleComplete = async () => {
   completeOrders(show.value.serialNo)
+    .then((res) => showAlert.value = {show: true, success: true, message: res.data.message})
+    .catch((err) => showAlert.value = {show: true, success: false, message: err})
+  closeAll()
+}
+const handleUpdate = async (event) => {
+  updateOrders(show.value.serialNo, event.target.value)
     .then((res) => showAlert.value = {show: true, success: true, message: res.data.message})
     .catch((err) => showAlert.value = {show: true, success: false, message: err})
   closeAll()
@@ -77,7 +83,13 @@ const handleComplete = async () => {
         </li>
         <li class="flex justify-between">
           <p>Priority</p>
-          <ItemPriority :priority="show.priority"/>
+          <v-tooltip text="Select to update">
+            <template v-slot:activator="{ props }">
+              <select v-bind="props" @change="handleUpdate($event)" id="priority" name="priority" class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600 appearance-none cursor-pointer border invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1">
+                <option v-for="(display, name) in dataTypes['priority']" :value="name" :selected="display==show.priority?true:false">{{ display }}</option>
+              </select>
+            </template>
+          </v-tooltip>
         </li>
         <li class="flex justify-between">
           <p>Fabrication</p>

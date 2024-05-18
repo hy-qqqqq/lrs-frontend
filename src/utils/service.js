@@ -67,6 +67,19 @@ export const completeOrders = async (id) => {
   }
 }
 
+// Adjust order priority
+export const updateOrders = async (id, priority) => {
+  const data = {"priority": priority}
+  const conf = {headers: {'Content-Type': 'application/json'}}
+  try {
+    const res = await instance.put(`/api/orders/${id}`, data, conf)
+    return Promise.resolve(res)
+  } catch (error) {
+    const err = error.response ? error.response.data.error : error
+    return Promise.reject(`PUT /api/orders ERROR: ${err}`)
+  }
+}
+
 // Download file
 export const downloadFile = async (filePath) => {
   const data = {"filePath": filePath}
