@@ -5,28 +5,6 @@ import { useUserStore } from '@/stores/user'
 
 <script>
 export default {
-  methods: {
-    logout() {
-      const token = sessionStorage.getItem('token');
-      axios.post('http://localhost:5001/api/logout', {}, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
-        .then(response => {
-          const store = useUserStore()
-          store.clearUser()
-          console.log(response.data);
-          alert('Logout successful!');
-          this.$router.push({ path: '/login' });
-        })
-        .catch(error => {
-          // 處理登出失敗的情況
-          console.error(error);
-          alert('Logout failed.');
-        });
-    }
-  },
   mounted() {
     this.setAuthHeader(); // Set the Authorization header when the component is mounted
   },
@@ -41,14 +19,11 @@ export default {
       }
     },
     logout() {
-      const token = this.getToken();
-      axios.post('http://localhost:5001/api/logout', {}, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      })
+      axios.post('http://localhost:5001/api/logout')
         .then(response => {
           console.log(response.data);
+          const store = useUserStore()
+          store.clearUser()
           sessionStorage.removeItem('token');
           alert('Logout successful!');
           this.$router.push({ path: '/login' });
