@@ -8,11 +8,28 @@ import Sidebar from './Sidebar.vue'
 </script>
 
 <script>
+// Set up Axios instance with base URL
 const instance = axios.create({
   baseURL: 'http://localhost:5001',
   withCredentials: true,
   timeout: 300,
 });
+
+// Function to get token from sessionStorage
+const getToken = () => {
+  return sessionStorage.getItem('token');
+};
+
+// Function to set Authorization header for Axios instance
+const setAuthHeader = () => {
+  const token = getToken();
+  if (token) {
+    instance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  }
+};
+
+// Set Authorization header when the component is mounted
+setAuthHeader();
 
 export default {
   data() {

@@ -7,7 +7,12 @@ import { useUserStore } from '@/stores/user'
 export default {
   methods: {
     logout() {
-      axios.post('http://localhost:5001/api/logout')
+      const token = sessionStorage.getItem('token');
+      axios.post('http://localhost:5001/api/logout', {}, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
         .then(response => {
           const store = useUserStore()
           store.clearUser()
@@ -21,8 +26,40 @@ export default {
           alert('Logout failed.');
         });
     }
+  },
+  mounted() {
+    this.setAuthHeader(); // Set the Authorization header when the component is mounted
+  },
+  methods: {
+    getToken() {
+      return sessionStorage.getItem('token'); // Get the token from sessionStorage
+    },
+    setAuthHeader() {
+      const token = this.getToken();
+      if (token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      }
+    },
+    logout() {
+      const token = this.getToken();
+      axios.post('http://localhost:5001/api/logout', {}, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+        .then(response => {
+          console.log(response.data);
+          sessionStorage.removeItem('token');
+          alert('Logout successful!');
+          this.$router.push({ path: '/login' });
+        })
+        .catch(error => {
+          console.error(error);
+          alert('Logout failed.');
+        });
+    }
   }
-}
+};
 </script>
 
 <template>

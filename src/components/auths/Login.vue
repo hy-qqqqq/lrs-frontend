@@ -29,8 +29,6 @@
   </div>
 </template>
 
-
-
 <script>
 import axios from 'axios';
 import { useUserStore } from '@/stores/user'
@@ -60,10 +58,11 @@ export default {
       axios.post('http://localhost:5001/api/login', data)
         .then(response => {
           // Handle successful login
-          const store = useUserStore()
-          store.setUser(response.data.userID, response.data.dep)
+          console.log(response.data);
+          const userToken = response.data.token;
+          sessionStorage.setItem('token', userToken); // Store token in sessionStorage
           alert('Login successful!'); // You can redirect or perform other actions here
-          this.$router.push({ path: '/order' }); // Navigate to the "hello" page
+          this.$router.push({ path: '/order' }); // Navigate to the order page
         })
         .catch(error => {
           // Handle login error
@@ -77,12 +76,22 @@ export default {
     },
     navigateToRegister() {
       this.$router.push({ path: '/register' }); // Navigate to the register page
+    },
+    getToken() {
+      return sessionStorage.getItem('token'); // Get the token from sessionStorage
+    },
+    setAuthHeader() {
+      const token = this.getToken();
+      if (token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      }
     }
+  },
+  mounted() {
+    this.setAuthHeader(); // Set the Authorization header when the component is mounted
   }
 };
 </script>
-
-
 
 <style scoped>
 @import '@/assets/login.css';
