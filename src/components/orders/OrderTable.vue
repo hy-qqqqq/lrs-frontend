@@ -22,10 +22,12 @@ onMounted(async () => {
 })
 // Variables
 const items = ref()
+const toggle = ref()
 const search = ref('')
 const loading = ref(false)
 const showDetail = ref(false)
 const itemFilter = ref({})
+// Functions
 const computedItems = computed(() => {
   loading.value = true
   let res = items.value
@@ -37,7 +39,6 @@ const computedItems = computed(() => {
   loading.value = false
   return res
 })
-// Functions
 const defaultFilter = (value, query, item) => {
   if (value == null || query == null) return -1
   return value.toString().toLocaleLowerCase().indexOf(query.toString().toLocaleLowerCase())
@@ -50,8 +51,44 @@ const customKeyFilter = {
 
 <template>
   <OrderDetail v-model:show="showDetail"/>
-  <form @submit.prevent="" id="filterForm" class="flex flex-row gap-5">
-    <div class="grow">
+  <div class="flex flex-row justify-between items-center">
+    <v-btn-toggle
+      v-model="toggle"
+      divided
+    >
+      <v-btn value="all" active>
+        <v-icon icon="mdi-clipboard" start></v-icon>
+        <span>All</span>
+      </v-btn>
+      <v-btn value="approvals">
+        <v-icon icon="mdi-clipboard-check" start></v-icon>
+        <span>Approvals</span>
+      </v-btn>
+      <v-btn value="myOrders">
+        <v-icon icon="mdi-clipboard-account" start></v-icon>
+        <span>My Orders</span>
+      </v-btn>
+    </v-btn-toggle>
+    <div class="flex flex-row items-center gap-3">
+      <v-menu :close-on-content-click="false" transition="slide-y-transition">
+        <template v-slot:activator="{ props }">
+          <v-btn v-bind="props" icon="mdi-filter-multiple-outline" variant="plain"></v-btn>
+        </template>
+        <div class="p-4 text-sm flex flex-col gap-3 bg-white border rounded-lg shadow-xl">
+          <div v-for="(spec, field) in dataTypes">
+            Select {{ field }}
+            <v-chip-group v-model="itemFilter[field]">
+              <v-chip v-for="(display) in spec"
+                :value="display"
+                :text="display"
+                variant="outlined"
+                size="small"
+                filter
+              ></v-chip>
+            </v-chip-group>
+          </div>
+        </div>
+      </v-menu>
       <v-text-field 
         v-model="search" 
         label="Type to search..." 
@@ -59,20 +96,10 @@ const customKeyFilter = {
         variant="outlined"
         hide-details
         clearable
+        class="w-60"
       ></v-text-field>
     </div>
-    <v-select
-      v-for="(spec, field) in dataTypes" v-model="itemFilter[field]"
-      :label="'Select '+ field"
-      :items="Object.values(spec)"
-      density="compact"
-      variant="outlined"
-      height="10"
-      hide-details
-      clearable
-      class="max-w-40"
-    ></v-select>
-  </form>
+  </div>
 
   <v-data-table
     :headers="headers"
@@ -86,7 +113,7 @@ const customKeyFilter = {
     :custom-key-filter="customKeyFilter"
     item-value="serialString"
     hide-default-footer
-    class="shadow-sm max-h-[650px]"
+    class="shadow-sm max-h-[630px]"
   >
     <template v-slot:item="{ item }">
       <tr class="transition-all duration-500 hover:bg-gray-50 text-gray-500">
