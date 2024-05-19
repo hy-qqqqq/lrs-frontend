@@ -59,9 +59,8 @@ export default {
       axios.post('http://localhost:5001/api/login', data)
         .then(response => {
           // Handle successful login
-          console.log(response.data);
-          const userToken = response.data.token;
-          sessionStorage.setItem('token', userToken); // Store token in sessionStorage
+          sessionStorage.setItem('userID', response.data.userID)
+          sessionStorage.setItem('dep', response.data.dep)
           alert('Login successful!'); // You can redirect or perform other actions here
           this.$router.push({ path: '/order' }); // Navigate to the "hello" page
         })

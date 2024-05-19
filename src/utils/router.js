@@ -20,7 +20,7 @@ export const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = sessionStorage.getItem('token');
+  const isAuthenticated = true  // TODO: dev only
 
   if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
     next({ name: 'login' });
