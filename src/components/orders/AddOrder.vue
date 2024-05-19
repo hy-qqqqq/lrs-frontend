@@ -3,12 +3,13 @@
 import { ref } from 'vue'
 import { dataTypes } from '../data/order.spec.js'
 import { addOrder } from '@/utils/service.js'
+import { useCounterStore } from '@/stores/counter.js'
 // Components
 import Alert from '../utils/Alert.vue'
-// Defines
-const keyReload = defineModel('keyReload', {required: true})
+// Variables
 const show = defineModel('show', {required: true})
 const showAlert = ref({show: false})
+const store = useCounterStore()
 // Functions
 const handleSubmit = async (event) => {
   const formData = new FormData(event.target)
@@ -16,10 +17,12 @@ const handleSubmit = async (event) => {
     formData.delete('file')
   }
   addOrder(formData)
-    .then((res) => showAlert.value = {show: true, success: true, message: res.data.message})
+    .then((res) => {
+      showAlert.value = {show: true, success: true, message: res.data.message}
+      store.increment()
+    })
     .catch((err) => showAlert.value = {show: true, success: false, message: err})
   show.value = false
-  keyReload.value += 1
 }
 </script>
 

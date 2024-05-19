@@ -1,25 +1,24 @@
 <script setup>
 // Utilities
-import { ref, computed, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { ref, computed, onMounted, watch } from 'vue'
 import { headers, dataTypes } from '../data/order.spec.js'
 import { getOrders } from '@/utils/service.js'
 import { useUserStore } from '@/stores/user.js'
+import { useCounterStore } from '@/stores/counter.js'
 // Components
 import OrderItem from './OrderItem.vue'
 import OrderDetail from './OrderDetail.vue'
+// Stores
+const userStore = useUserStore()
+const counterStore = useCounterStore()
+const { count } = storeToRefs(counterStore)
 // Hooks
 onMounted(async () => {
-  // fetch orders
-  loading.value = true
-  const { data } = await getOrders()
-  // preprocess display names
-  data.map(function (d) {
-    d.priority = dataTypes.priority[d.priority]
-    d.lab = dataTypes.lab[d.lab]
-    return d
-  })
-  // set
-  items.value = data
+  await handleGet()
+})
+watch(count, async () => {
+  await handleGet()
 })
 // Variables
 const items = ref([])
@@ -28,16 +27,15 @@ const search = ref('')
 const loading = ref(false)
 const showDetail = ref(false)
 const itemFilter = ref({})
-const store = useUserStore()
 // Functions
 const computedItems = computed(() => {
   loading.value = true
   let res = items.value
   // process tabs
   if (toggle.value == 'approvals') {
-    res = res.filter(item => item['approvedBy'] == store.user.id)
+    res = res.filter(item => item['approvedBy'] == userStore.user.id)
   } else if (toggle.value == 'myOrders') {
-    res = res.filter(item => item['createdBy'] == store.user.id)
+    res = res.filter(item => item['createdBy'] == userStore.user.id)
   }
   // process filters
   Object.entries(itemFilter.value).forEach(([k, v]) => {
@@ -55,6 +53,18 @@ const defaultFilter = (value, query, item) => {
 const customKeyFilter = {
     'createdAt': (v, q, i) => true,
     'updatedAt': (v, q, i) => true
+}
+const handleGet = async () => {
+  loading.value = true
+  const { data } = await getOrders()
+  // preprocess display names
+  data.map(function (d) {
+    d.priority = dataTypes.priority[d.priority]
+    d.lab = dataTypes.lab[d.lab]
+    return d
+  })
+  // set
+  items.value = data
 }
 </script>
 

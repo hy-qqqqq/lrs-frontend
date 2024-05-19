@@ -1,19 +1,18 @@
 <script setup>
-import { ref } from "vue";
+import { ref } from 'vue'
 // Components
 import OrderTable from './orders/OrderTable.vue'
 import Sidebar from './Sidebar.vue'
 import AddOrder from './orders/AddOrder.vue'
 // Variables
 const showAdd = ref(false)
-const keyReload = ref(0)
 </script>
 
 <template>
   <Sidebar />
   <div class="m-6">
     <div class="ml-64 flex flex-col gap-4">
-      <AddOrder v-model:show="showAdd" v-model:keyReload="keyReload"/>
+      <AddOrder v-model:show="showAdd"/>
       <div class="flex flex-row justify-between">
         <h1>
           Order
@@ -24,7 +23,7 @@ const keyReload = ref(0)
       </div>
       <v-divider class="border-opacity-100"></v-divider>
       <Suspense>
-        <OrderTable :key="keyReload"/>
+        <OrderTable />
       </Suspense>
     </div>
   </div>

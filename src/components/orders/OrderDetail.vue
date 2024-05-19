@@ -3,17 +3,19 @@
 import { ref } from 'vue'
 import { delOrder, approveOrder, completeOrder, updateOrder } from '@/utils/service'
 import { dataTypes } from '../data/order.spec'
+import { useCounterStore } from '@/stores/counter'
 // Components
 import ItemHistory from './items/ItemHistory.vue'
 import ItemStatus from './items/ItemStatus.vue'
 import ItemAttach from './items/ItemAttach.vue'
 import Alert from '../utils/Alert.vue'
-// Defines
+// Variables
 const show = defineModel('show', {required: true})
 const showAttach = ref(false)
 const showHistory = ref(false)
 const showConfirm = ref(false)
 const showAlert = ref({show: false})
+const store = useCounterStore()
 // Functions
 const closeAll = () => {
   show.value = false
@@ -23,25 +25,37 @@ const closeAll = () => {
 }
 const handleDelete = async () => {
   delOrder(show.value.serialNo)
-    .then((res) => showAlert.value = {show: true, success: true, message: res.data.message})
+    .then((res) => {
+      showAlert.value = {show: true, success: true, message: res.data.message}
+      store.increment()
+    })
     .catch((err) => showAlert.value = {show: true, success: false, message: err})
   closeAll()
 }
 const handleApprove = async (action) => {
   approveOrder(show.value.serialNo, action)
-    .then((res) => showAlert.value = {show: true, success: true, message: res.data.message})
+    .then((res) => {
+      showAlert.value = {show: true, success: true, message: res.data.message}
+      store.increment()
+    })
     .catch((err) => showAlert.value = {show: true, success: false, message: err})
   closeAll()
 }
 const handleComplete = async () => {
   completeOrder(show.value.serialNo)
-    .then((res) => showAlert.value = {show: true, success: true, message: res.data.message})
+    .then((res) => {
+      showAlert.value = {show: true, success: true, message: res.data.message}
+      store.increment()
+    })
     .catch((err) => showAlert.value = {show: true, success: false, message: err})
   closeAll()
 }
 const handleUpdate = async (event) => {
   updateOrder(show.value.serialNo, event.target.value)
-    .then((res) => showAlert.value = {show: true, success: true, message: res.data.message})
+    .then((res) => {
+      showAlert.value = {show: true, success: true, message: res.data.message}
+      store.increment()
+    })
     .catch((err) => showAlert.value = {show: true, success: false, message: err})
   closeAll()
 }
