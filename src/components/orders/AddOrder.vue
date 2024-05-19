@@ -2,7 +2,7 @@
 // Utilities
 import { ref } from 'vue'
 import { dataTypes } from '../data/order.spec.js'
-import { addOrders } from '@/utils/service.js'
+import { addOrder } from '@/utils/service.js'
 // Components
 import Alert from '../utils/Alert.vue'
 // Defines
@@ -15,7 +15,7 @@ const handleSubmit = async (event) => {
   if (event.target.file.files.length === 0) {
     formData.delete('file')
   }
-  addOrders(formData)
+  addOrder(formData)
     .then((res) => showAlert.value = {show: true, success: true, message: res.data.message})
     .catch((err) => showAlert.value = {show: true, success: false, message: err})
   show.value = false

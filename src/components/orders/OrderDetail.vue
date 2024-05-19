@@ -1,7 +1,7 @@
 <script setup>
 // Utilities
 import { ref } from 'vue'
-import { delOrders, approveOrders, completeOrders, updateOrders } from '@/utils/service'
+import { delOrder, approveOrder, completeOrder, updateOrder } from '@/utils/service'
 import { dataTypes } from '../data/order.spec'
 // Components
 import ItemHistory from './items/ItemHistory.vue'
@@ -22,25 +22,25 @@ const closeAll = () => {
   showConfirm.value = false
 }
 const handleDelete = async () => {
-  delOrders(show.value.serialNo)
+  delOrder(show.value.serialNo)
     .then((res) => showAlert.value = {show: true, success: true, message: res.data.message})
     .catch((err) => showAlert.value = {show: true, success: false, message: err})
   closeAll()
 }
 const handleApprove = async (action) => {
-  approveOrders(show.value.serialNo, action)
+  approveOrder(show.value.serialNo, action)
     .then((res) => showAlert.value = {show: true, success: true, message: res.data.message})
     .catch((err) => showAlert.value = {show: true, success: false, message: err})
   closeAll()
 }
 const handleComplete = async () => {
-  completeOrders(show.value.serialNo)
+  completeOrder(show.value.serialNo)
     .then((res) => showAlert.value = {show: true, success: true, message: res.data.message})
     .catch((err) => showAlert.value = {show: true, success: false, message: err})
   closeAll()
 }
 const handleUpdate = async (event) => {
-  updateOrders(show.value.serialNo, event.target.value)
+  updateOrder(show.value.serialNo, event.target.value)
     .then((res) => showAlert.value = {show: true, success: true, message: res.data.message})
     .catch((err) => showAlert.value = {show: true, success: false, message: err})
   closeAll()

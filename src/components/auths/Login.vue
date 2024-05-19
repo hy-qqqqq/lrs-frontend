@@ -31,6 +31,7 @@
 
 <script>
 import axios from 'axios';
+import { useUserStore } from '@/stores/user'
 
 export default {
   data() {
@@ -57,7 +58,8 @@ export default {
       axios.post('http://localhost:5001/api/login', data)
         .then(response => {
           // Handle successful login
-          console.log(response.data);
+          const store = useUserStore()
+          store.setUser(response.data)
           const accessToken = response.data.access_token;
           sessionStorage.setItem('token', accessToken); // Store token in sessionStorage
           alert('Login successful!'); // You can redirect or perform other actions here

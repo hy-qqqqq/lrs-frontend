@@ -4,10 +4,11 @@ import { useSessionStorage } from '@vueuse/core'
 export const useUserStore = defineStore('user', () => {
   const user = useSessionStorage('user', {})
 
-  function setUser(userID, dep) {
+  function setUser(data) {
     user.value = {
-      id: userID,
-      dep: dep
+      id: data.userID,
+      dep: data.dep,
+      token: data.access_token
     }
   }
 
