@@ -310,13 +310,6 @@ export default {
             <div id="labChart"></div> 
           </div>
         </div>
-        
-        <div class="flex justify-center">
-          <div class="chart" style="width: 60%;">
-            <h2>系統穩定性監測</h2>
-            <canvas id="systemStabilityChart"></canvas>
-          </div>
-        </div>
       </div>
     </div>
   </div>
