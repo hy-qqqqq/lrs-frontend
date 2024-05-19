@@ -31,7 +31,6 @@
 
 <script>
 import axios from 'axios';
-import { useUserStore } from '@/stores/user'
 
 export default {
   data() {
@@ -59,8 +58,8 @@ export default {
         .then(response => {
           // Handle successful login
           console.log(response.data);
-          const userToken = response.data.token;
-          sessionStorage.setItem('token', userToken); // Store token in sessionStorage
+          const accessToken = response.data.access_token;
+          sessionStorage.setItem('token', accessToken); // Store token in sessionStorage
           alert('Login successful!'); // You can redirect or perform other actions here
           this.$router.push({ path: '/order' }); // Navigate to the order page
         })
