@@ -33,6 +33,7 @@
 
 <script>
 import axios from 'axios';
+import { useUserStore } from '@/stores/user'
 
 export default {
   data() {
@@ -59,8 +60,8 @@ export default {
       axios.post('http://localhost:5001/api/login', data)
         .then(response => {
           // Handle successful login
-          sessionStorage.setItem('userID', response.data.userID)
-          sessionStorage.setItem('dep', response.data.dep)
+          const store = useUserStore()
+          store.setUser(response.data.userID, response.data.dep)
           alert('Login successful!'); // You can redirect or perform other actions here
           this.$router.push({ path: '/order' }); // Navigate to the "hello" page
         })
