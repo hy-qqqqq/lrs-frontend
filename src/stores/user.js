@@ -8,7 +8,6 @@ export const useUserStore = defineStore('user', () => {
     user.value = {
       id: data.userID,
       dep: data.dep,
-      token: data.access_token
     }
   }
 

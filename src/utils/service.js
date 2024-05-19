@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { useUserStore } from '@/stores/user'
 
 const instance = axios.create({
   baseURL: 'http://localhost:5001',
@@ -8,9 +7,9 @@ const instance = axios.create({
 });
 
 const setAuthHeader = () => {
-  const store = useUserStore()
-  if (store.user.token) {
-    instance.defaults.headers.common['Authorization'] = `Bearer ${store.user.token}`;
+  const token = sessionStorage.getItem('token')
+  if (token) {
+    instance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   }
 }
 
