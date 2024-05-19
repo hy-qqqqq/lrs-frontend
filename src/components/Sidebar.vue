@@ -1,5 +1,6 @@
 <script setup>
-import axios from 'axios';
+import axios from 'axios'
+import { useUserStore } from '@/stores/user'
 </script>
 
 <script>
@@ -8,8 +9,9 @@ export default {
     logout() {
       axios.post('http://localhost:5001/api/logout')
         .then(response => {
+          const store = useUserStore()
+          store.clearUser()
           console.log(response.data);
-          sessionStorage.removeItem('token');
           alert('Logout successful!');
           this.$router.push({ path: '/login' });
         })
@@ -41,13 +43,7 @@ export default {
           <span class="flex-1 ms-3 whitespace-nowrap">Order</span>
         </router-link>
       </li>
-      <li>
-        <router-link :to="{ name: 'approval' }" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-          <v-icon icon="mdi-check-decagram" color="grey-darken-1"></v-icon>  
-          <span class="flex-1 ms-3 whitespace-nowrap">Approval</span>
-        </router-link>
-      </li>
-      </ul>
+    </ul>
 
       <!-- Functions -->
       <ul class="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">

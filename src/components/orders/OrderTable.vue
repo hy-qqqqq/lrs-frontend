@@ -1,8 +1,9 @@
 <script setup>
-// Imports
-import { ref, computed, onMounted } from "vue"
+// Utilities
+import { ref, computed, onMounted } from 'vue'
 import { headers, dataTypes } from '../data/order.spec.js'
-import { getOrders } from "@/utils/service.js";
+import { getOrders } from '@/utils/service.js'
+import { useUserStore } from '@/stores/user.js'
 // Components
 import OrderItem from './OrderItem.vue'
 import OrderDetail from './OrderDetail.vue'
@@ -21,16 +22,24 @@ onMounted(async () => {
   items.value = data
 })
 // Variables
-const items = ref()
-const toggle = ref()
+const items = ref([])
+const toggle = ref('all')
 const search = ref('')
 const loading = ref(false)
 const showDetail = ref(false)
 const itemFilter = ref({})
+const store = useUserStore()
 // Functions
 const computedItems = computed(() => {
   loading.value = true
   let res = items.value
+  // process tabs
+  if (toggle.value == 'approvals') {
+    res = res.filter(item => item['approvedBy'] == store.user.id)
+  } else if (toggle.value == 'myOrders') {
+    res = res.filter(item => item['createdBy'] == store.user.id)
+  }
+  // process filters
   Object.entries(itemFilter.value).forEach(([k, v]) => {
     if (v) {
       res = res.filter(item => item[k] == v)
@@ -56,7 +65,7 @@ const customKeyFilter = {
       v-model="toggle"
       divided
     >
-      <v-btn value="all" active>
+      <v-btn value="all">
         <v-icon icon="mdi-clipboard" start></v-icon>
         <span>All</span>
       </v-btn>

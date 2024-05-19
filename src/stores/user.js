@@ -1,8 +1,8 @@
-import { ref } from 'vue'
-import { defineStore } from 'pinia';
+import { defineStore } from 'pinia'
+import { useSessionStorage } from '@vueuse/core'
 
 export const useUserStore = defineStore('user', () => {
-  const user = ref({})
+  const user = useSessionStorage('user', {})
 
   function setUser(userID, dep) {
     user.value = {
