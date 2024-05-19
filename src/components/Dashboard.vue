@@ -12,7 +12,7 @@ import Sidebar from './Sidebar.vue'
 const instance = axios.create({
   baseURL: 'http://localhost:5001',
   withCredentials: true,
-  timeout: 300,
+  timeout: 1000,
 });
 
 // Function to get token from sessionStorage
@@ -89,7 +89,7 @@ export default {
             { name: 'Urgent', data: Object.values(priorityData.urgent), color: 'rgba(54, 162, 235, 0.6)' },
             { name: 'Emergency', data: Object.values(priorityData.emergency), color: 'rgba(255, 206, 86, 0.6)' },
           ],
-          xaxis: { categories: ['Issued', 'Rejected', 'Completed', 'Approved'] },
+          xaxis: { categories: ['Completed', 'Rejected', 'Issued', 'Approved'] },
           fill: { opacity: 1 },
         };
 
@@ -124,7 +124,7 @@ export default {
             { name: 'Fab B', data: Object.values(factoryData['Fab B']), color: 'rgba(54, 162, 235, 0.6)' },
             { name: 'Fab C', data: Object.values(factoryData['Fab C']), color: 'rgba(255, 206, 86, 0.6)' },
           ],
-          xaxis: { categories: ['Issued', 'Rejected', 'Completed', 'Approved'] },
+          xaxis: { categories: ['Completed', 'Rejected', 'Issued', 'Approved'] },
           fill: { opacity: 1 },
         };
 
@@ -160,7 +160,7 @@ export default {
             { name: 'Surface Analysis Lab', data: Object.values(labData.surface), color: 'rgba(54, 162, 235, 0.6)' },
             { name: 'Composition Analysis Lab', data: Object.values(labData.composition), color: 'rgba(255, 206, 86, 0.6)' },
           ],
-          xaxis: { categories: ['Issued', 'Rejected', 'Completed', 'Approved'] },
+          xaxis: { categories: ['Completed', 'Rejected', 'Issued', 'Approved'] },
           fill: { opacity: 1 },
         };
 
