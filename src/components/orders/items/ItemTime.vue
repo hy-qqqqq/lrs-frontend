@@ -12,6 +12,6 @@ defineProps({
   {{ $filters.formatDate(time, 'LL') }}
   <br />
   <p class="text-xs">
-    {{ $filters.formatDate(time, 'hh:mm:ss') }}
+    {{ $filters.formatDate(time, 'HH:mm:ss') }}
   </p>
 </template>
