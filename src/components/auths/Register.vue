@@ -34,6 +34,10 @@
             <option value="composition">成分分析實驗室</option>
           </select>
         </div>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" v-model="email" required>
+        </div>
         <button type="submit">Register</button>
       </form>
       <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
@@ -50,13 +54,14 @@ export default {
       userID: '',
       userPassword: '',
       department: '',
+      email: '',
       errorMessage: ''
     };
   },
   methods: {
     register() {
       // Check validation
-      if (!this.userID || !this.userPassword || !this.department) {
+      if (!this.userID || !this.userPassword || !this.department || !this.email) {
         this.errorMessage = 'Please fill out all fields.';
         return;
       }
@@ -65,7 +70,8 @@ export default {
       const data = {
         userID: this.userID,
         userPassword: this.userPassword,
-        dep: this.department
+        dep: this.department,
+        email: this.email
       };
 
       axios.post('http://localhost:5001/api/register', data)
@@ -78,19 +84,23 @@ export default {
         })
         .catch(error => {
           console.error(error);
-          this.errorMessage = 'An error occurred while registering. Please try again.';
+          if (error.response && error.response.data && error.response.data.error) {
+            this.errorMessage = error.response.data.error;
+          } else {
+            this.errorMessage = 'An error occurred while registering. Please try again.';
+          }
         });
 
       // Clear form fields
       this.userID = '';
       this.userPassword = '';
       this.department = '';
+      this.email = '';
       this.errorMessage = '';
     }
   }
 };
 </script>
-
 
 <style scoped>
 @import '@/assets/register.css';
