@@ -24,7 +24,7 @@ export const getOrders = async () => {
     const res = await instance.get(`/api/orders`)
     return Promise.resolve(res)
   } catch (error) {
-    if (error.response.status == 401) clearSession()
+    if (error.response && error.response.status == 401) clearSession()
     const err = error.response ? error.response.data.error : error
     return Promise.reject(`ERROR getOrders: ${err}`)
   }
@@ -38,7 +38,7 @@ export const addOrder = async (formData) => {
     const res = await instance.post(`/api/orders`, formData, conf)
     return Promise.resolve(res)
   } catch (error) {
-    if (error.response.status == 401) clearSession()
+    if (error.response && error.response.status == 401) clearSession()
     const err = error.response ? error.response.data.error : error
     return Promise.reject(`ERROR addOrder: ${err}`)
   }
@@ -51,7 +51,7 @@ export const delOrder = async (id) => {
     const res = await instance.delete(`/api/orders/${id}`)
     return Promise.resolve(res)
   } catch (error) {
-    if (error.response.status == 401) clearSession()
+    if (error.response && error.response.status == 401) clearSession()
     const err = error.response ? error.response.data.error : error
     return Promise.reject(`ERROR delOrder: ${err}`)
   }
@@ -66,7 +66,7 @@ export const approveOrder = async (id, action) => {
     const res = await instance.post(`/api/approve_order/${id}`, data, conf)
     return Promise.resolve(res)
   } catch (error) {
-    if (error.response.status == 401) clearSession()
+    if (error.response && error.response.status == 401) clearSession()
     const err = error.response ? error.response.data.error : error
     return Promise.reject(`ERROR approveOrder: ${err}`)
   }
@@ -79,7 +79,7 @@ export const completeOrder = async (id) => {
     const res = await instance.post(`/api/complete_order/${id}`)
     return Promise.resolve(res)
   } catch (error) {
-    if (error.response.status == 401) clearSession()
+    if (error.response && error.response.status == 401) clearSession()
     const err = error.response ? error.response.data.error : error
     return Promise.reject(`ERROR completeOrder: ${err}`)
   }
@@ -94,7 +94,7 @@ export const updateOrder = async (id, priority) => {
     const res = await instance.put(`/api/orders/${id}`, data, conf)
     return Promise.resolve(res)
   } catch (error) {
-    if (error.response.status == 401) clearSession()
+    if (error.response && error.response.status == 401) clearSession()
     const err = error.response ? error.response.data.error : error
     return Promise.reject(`ERROR updateOrder: ${err}`)
   }
@@ -112,7 +112,7 @@ export const downloadFile = async (filePath) => {
     const res = await instance.post(`/api/download`, data, conf)
     return Promise.resolve(res)
   } catch (error) {
-    if (error.response.status == 401) clearSession()
+    if (error.response && error.response.status == 401) clearSession()
     const err = error.response ? error.response.data.error : error
     return Promise.reject(`ERROR downloadFile: ${err}`)
   }
