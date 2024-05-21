@@ -10,7 +10,7 @@ import { useCounterStore } from '@/stores/counter.js'
 import OrderItem from './OrderItem.vue'
 import OrderDetail from './OrderDetail.vue'
 // Stores
-const userStore = useUserStore()
+const { user } = useUserStore()
 const counterStore = useCounterStore()
 const { count } = storeToRefs(counterStore)
 // Hooks
@@ -33,9 +33,11 @@ const computedItems = computed(() => {
   let res = items.value
   // process tabs
   if (toggle.value == 'approvals') {
-    res = res.filter(item => item['approvedBy'] == userStore.user.id)
+    res = res.filter(item => item['approvedBy'] == user.id)
   } else if (toggle.value == 'myOrders') {
-    res = res.filter(item => item['createdBy'] == userStore.user.id)
+    res = res.filter(item => item['createdBy'] == user.id)
+  } else if (toggle.value == 'myLabs') {
+    res = res.filter(item => item['lab'] == user.dep)
   }
   // process filters
   Object.entries(itemFilter.value).forEach(([k, v]) => {
@@ -79,13 +81,17 @@ const handleGet = async () => {
         <v-icon icon="mdi-clipboard" start></v-icon>
         <span>All</span>
       </v-btn>
-      <v-btn value="approvals">
-        <v-icon icon="mdi-clipboard-check" start></v-icon>
-        <span>Approvals</span>
+      <v-btn v-if="Object.values(dataTypes.lab).includes(user.dep)" value="myLabs">
+        <v-icon icon="mdi-clipboard-alert" start></v-icon>
+        <span>Lab Orders</span>
       </v-btn>
       <v-btn value="myOrders">
         <v-icon icon="mdi-clipboard-account" start></v-icon>
         <span>My Orders</span>
+      </v-btn>
+      <v-btn value="approvals">
+        <v-icon icon="mdi-clipboard-check" start></v-icon>
+        <span>My Approvals</span>
       </v-btn>
     </v-btn-toggle>
     <div class="flex flex-row items-center gap-3">
