@@ -1,108 +1,112 @@
 <script setup>
 // Utilities
 import { ref } from 'vue'
-import { dataTypes } from '../data/order.spec.js'
+import { dataTypes } from '../data/addOrder.spec.js'
 import { addOrder } from '@/utils/service.js'
 import { useCounterStore } from '@/stores/counter.js'
 // Components
 import Alert from '../utils/Alert.vue'
-// Variables
-const show = defineModel('show', {required: true})
-const showAlert = ref({show: false})
+// Stores
 const store = useCounterStore()
+// Variables
+const showAlert = ref({show: false})
+const rules = [value => !!value || "Required."]
+const form = ref({})
+const formInstance = ref()
 // Functions
-const handleSubmit = async (event) => {
-  const formData = new FormData(event.target)
-  if (event.target.file.files.length === 0) {
-    formData.delete('file')
+const handleSubmit = async (event, show) => {
+  const res = await event
+  if (res.valid) {
+    const formData = new FormData(event.target)
+    if (event.target.file.files.length === 0) {
+      formData.delete('file')
+    }
+    addOrder(formData)
+      .then((res) => {
+        show.value = false
+        showAlert.value = {show: true, success: true, message: res.data.message}
+        store.increment()
+      })
+      .catch((err) => showAlert.value = {show: true, success: false, message: err})
+    formInstance.value.reset()
   }
-  addOrder(formData)
-    .then((res) => {
-      showAlert.value = {show: true, success: true, message: res.data.message}
-      store.increment()
-    })
-    .catch((err) => showAlert.value = {show: true, success: false, message: err})
-  show.value = false
 }
 </script>
 
 <template>
 
 <Alert :show="showAlert"/>
+<v-dialog max-width="500">
 
-<transition
-    enter-active-class="transition ease-out duration-150 transform"
-    enter-from-class="opacity-0"
-    enter-to-class="opacity-100"
-    leave-active-class="transition ease-in duration-100 transform"
-    leave-from-class="opacity-100"
-    leave-to-class="opacity-0">
-<!-- Main modal -->
-<div v-if="show!=false" @click="show=false" id="add-modal" aria-hidden="true" class="overflow-y-auto overflow-x-hidden flex fixed z-50 justify-center items-center w-full inset-0 h-[calc(100%-1rem)] max-h-full bg-gray-200/50">
-  <!-- Modal content -->
-  <div @click.stop="" class="flex flex-col relative bg-white rounded-lg shadow dark:bg-gray-700 min-w-80 max-h-full">
-    <!-- Modal header -->
-    <div class="flex items-center justify-between p-5 shadow-sm">
-      <h4 class="font-semibold text-gray-900 dark:text-white">
-        Add Order
-      </h4>
-      <button @click="show=false" type="button" class="text-gray-400 bg-transparent hover:text-gray-900 rounded-lg text-sm ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
-        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-        </svg>
-        <span class="sr-only">Close modal</span>
-      </button>
-    </div>
-    <!-- Modal body -->
-    <div class="relative overflow-y-auto p-5 text-sm">
-      <form @submit.prevent="handleSubmit($event)" id="addForm" class="grid grid-cols-2 gap-4">
-        <div class="flex flex-col gap-1">
-          <label for="factory" class="font-semibold">
-            Fabrication
-            <abbr title="required" class="text-red-500">*</abbr>
-          </label>
-          <select id="factory" name="factory" required class="text-gray-600 appearance-none cursor-pointer invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 hover:bg-gray-100/50 shadow-sm border text-sm rounded-lg p-2">
-            <option value="" disabled selected>Select your fabrication</option>
-            <option v-for="(display, name) in dataTypes['factory']" :value="name">{{ display }}</option>
-          </select>
-        </div>
-        <div class="flex flex-col gap-1">
-          <label for="lab" class="font-semibold">
-            Laboratory
-            <abbr title="required" class="text-red-500">*</abbr>
-          </label>
-          <select id="lab" name="lab" required class="text-gray-600 appearance-none cursor-pointer invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 hover:bg-gray-100/50 shadow-sm border text-sm rounded-lg p-2">
-            <option value="" disabled selected>Select the laboratory for the order</option>
-            <option v-for="(display, name) in dataTypes['lab']" :value="name">{{ display }}</option>
-          </select>
-        </div>
-        <div class="flex flex-col gap-1">
-          <label for="priority" class="font-semibold">
-            Priority
-            <abbr title="required" class="text-red-500">*</abbr>
-          </label>
-          <select id="priority" name="priority" required class="text-gray-600 appearance-none cursor-pointer invalid:text-gray-400 focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 hover:bg-gray-100/50 shadow-sm border text-sm rounded-lg p-2">
-            <option value="" disabled selected>Select the order priority</option>
-            <option v-for="(display, name) in dataTypes['priority']" :value="name">{{ display }}</option>
-          </select>
-        </div>
-        <div class="flex flex-col gap-1">
-          <label for="approvedBy" class="font-semibold">Approver</label>
-          <input id="approvedBy" name="approvedBy" class="text-gray-600 appearance-none focus:outline-none focus:ring-blue-500 focus:ring-inset focus:ring-1 shadow-sm border text-sm rounded-lg p-2" placeholder="Type in the approver id">
-        </div>
-        <div class="col-span-2 flex flex-col gap-1">
-          <label for="file" class="font-semibold">Attachments</label>
-          <input id="file" name="file" type="file" accept="image/png,image/jpeg,.pdf,.txt" title="" multiple class="text-gray-600 border rounded-lg cursor-pointer shadow-sm focus:outline-none p-2
-            file:mr-4 file:py-2 file:px-4 file:rounded-md
-            file:border-0 file:font-semibold
-            file:bg-blue-50 file:text-blue-700
-            hover:file:bg-blue-100">
-        </div>
-        <button type="submit" class="col-span-2 text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm py-2.5">Submit</button>
-      </form>
-    </div>
-  </div>
-</div> 
-</transition>
+<template v-slot:activator="{ props: activatorProps }">
+  <v-btn
+    v-bind="activatorProps"
+    color="primary"
+    text="Add Order"
+  ></v-btn>
+</template>
+<template v-slot:default="{ isActive }">
+<v-sheet class="mx-auto p-5 w-full">
+  <h3 class="pb-5">Add New Order</h3>
+    <v-form
+      ref="formInstance"
+      @submit.prevent="handleSubmit($event, isActive)"
+      id="addForm"
+      class="grid grid-cols-2 gap-4"
+    >
+      <v-select
+        v-model="form.factory"
+        id="factory"
+        name="factory"
+        label="Fabrication*"
+        :items="dataTypes.factory"
+        :rules="rules"
+      ></v-select>
+      <v-select
+        v-model="form.lab"
+        id="lab"
+        name="lab"
+        label="Laboratory*"
+        :items="dataTypes.lab"
+        :rules="rules"
+      ></v-select>
+      <v-select
+        v-model="form.priority"
+        id="priority"
+        name="priority"
+        label="Priority*"
+        :items="dataTypes.priority"
+        :rules="rules"
+      ></v-select>
+      <v-text-field
+        label="Approver ID" 
+        clearable
+      ></v-text-field>
+      <v-textarea
+        id="description"
+        name="description"
+        label="Description"
+        variant="outlined"
+        clearable
+        class="col-span-2"
+      ></v-textarea>
+      <v-file-input
+        id="file"
+        name="file"
+        label="Upload attachments"
+        hint="Accept: txt, pdf, png, jpg, jpeg."
+        variant="outlined"
+        multiple
+        chips
+        counter
+        show-size
+        class="col-span-2"
+      ></v-file-input>
+      <small class="col-span-2 text-caption text-medium-emphasis">* Indicates required field</small>
+      <v-btn class="col-span-2" type="submit" color="primary" variant="tonal">Submit</v-btn>
+    </v-form>
+</v-sheet>
+</template>
+</v-dialog>
 
 </template>

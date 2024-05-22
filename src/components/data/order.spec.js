@@ -1,18 +1,5 @@
 import moment from "moment"
 
-export const headers1 = [
-  // TODO: worker id pattern, ex: tsmc-faba-0001
-  'Serial No.',   // String: serialString
-  'Priority',     // Select: regular, urgent, emergency
-  'Fabrication',  // Select: Fab A, Fab B, Fab C
-  'Lab',          // Select: chemical, surface, composition
-  'Start Time',   // String: createdAt (timestamp)
-  'Update Time',  // String: (timestamp)
-  'Issuer',       // String: createdBy (userID)
-  'Status',       // Select: Issued (gray), Approved (yellow), Completed (green), Rejected (red)
-  'Action'        // Button: Edit
-]
-
 export const headers = [
   { key: 'serialString', title: 'Serial no.'},
   { key: 'priority', title: 'Priority' },
