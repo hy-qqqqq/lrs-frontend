@@ -27,8 +27,7 @@ const items = ref([])
 const toggle = ref('all')
 const search = ref('')
 const loading = ref(false)
-const showDetail = ref(false)
-const showAdd = ref(false)
+const showDetail = ref({show: false})
 const itemFilter = ref({})
 const depLab = Object.values(dataTypes.lab).includes(user.dep)
 // Functions
@@ -139,7 +138,6 @@ const handleGet = async () => {
         ></v-text-field>
       </div>
     </div>
-
     <v-data-table
       :headers="headers"
       :items="computedItems"
@@ -155,8 +153,8 @@ const handleGet = async () => {
       class="shadow-sm max-h-[630px]"
     >
       <template v-slot:item="{ item }">
-        <tr class="transition-all duration-500 hover:bg-gray-50 text-gray-500">
-          <OrderItem :item="item" v-model:showDetail="showDetail"/>
+        <tr @click="showDetail={show:true, item:item}" class="cursor-pointer transition-all duration-500 hover:bg-gray-50 text-gray-500">
+          <OrderItem :item="item"/>
         </tr>
       </template>
     </v-data-table>

@@ -10,7 +10,6 @@ defineProps({
     required: true
   }
 })
-const showDetail = defineModel('showDetail')
 </script>
 
 <template>
@@ -57,13 +56,6 @@ const showDetail = defineModel('showDetail')
   <!-- Status -->
   <td class="p-2">
     <ItemStatus :status="item.status"/>
-  </td>
-
-  <!-- Action -->
-  <td class="p-2 text-blue-700">
-    <button @click="showDetail=item" type="button" class="cursor-pointer">
-      Details
-    </button>
   </td>
 
 </template>

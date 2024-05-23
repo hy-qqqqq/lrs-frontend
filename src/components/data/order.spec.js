@@ -22,7 +22,6 @@ export const headers = [
   },
   { key: 'createdBy', title: 'Issuer'},
   { key: 'status', title: 'Status'},
-  { key: 'action', title: 'Action', sortable: false }
 ]
 
 export const dataTypes = {
