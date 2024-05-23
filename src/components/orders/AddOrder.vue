@@ -79,6 +79,9 @@ const handleSubmit = async (event, show) => {
         :rules="rules"
       ></v-select>
       <v-text-field
+        v-model="form.approvedBy"
+        id="approvedBy"
+        name="approvedBy"
         label="Approver ID" 
         clearable
       ></v-text-field>
