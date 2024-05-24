@@ -9,22 +9,27 @@ const data = ref({
   userID: '',
   userPassword: ''
 })
+const visible = ref(false)
 const store = useUserStore()
 const router = useRouter()
+const rules = [value => !!value || "Required."]
 // Functions
-const handleLogin = async () => {
-  loginUser(data.value)
-    .then((res) => {
-      store.setUser(res.data)
-      sessionStorage.setItem('token', res.data.access_token)
-      alert('Login successful!')
-      router.push({ path: '/order' })
-    })
-    .catch((err) => {
-      console.error(err);
-      alert('Invalid user ID or password.')
-    })
-  data.value = {}
+const handleLogin = async (event) => {
+  const res = await event
+  if (res.valid) {
+    loginUser(data.value)
+      .then((res) => {
+        store.setUser(res.data)
+        sessionStorage.setItem('token', res.data.access_token)
+        alert('Login successful!')
+        router.push({ path: '/order' })
+      })
+      .catch((err) => {
+        console.error(err);
+        alert('Invalid user ID or password.')
+      })
+    data.value = {}
+  }
 }
 const toRegister = () => {
   router.push({ path: '/register' })
@@ -33,36 +38,44 @@ const toRegister = () => {
 </script>
 
 <template>
-  <div class="h-screen grid grid-cols-2 justify-items-center items-center">
-    <div class="flex flex-row gap-8 items-center">
-      <img alt="Vue logo" class="logo" src="../../assets/logo.svg" width="125" height="125" />
-      <div>
-        <h1 class="green">Lab Requirements Management</h1>
-        <h3>
-          <a href="https://vitejs.dev/" target="_blank" rel="noopener">Vite</a> +
-          <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a> +
-          <a href="https://tailwindcss.com/" target="_blank" rel="noopener">Tailwind CSS</a>.
-        </h3>
-      </div>
-    </div>
-    <div class="login-container">
-      <p class="login-title">Login</p>
-      <form @submit.prevent="handleLogin" class="login-form">
-        <div class="form-group">
-          <label for="username">User ID:</label>
-          <input type="text" id="username" v-model="data.userID" required>
-        </div>
-        <div class="form-group">
-          <label for="password">Password:</label>
-          <input type="password" id="password" v-model="data.userPassword" required>
-        </div>
-        <button type="submit" class="login-button">Log In</button>
-        <button type="button" @click="toRegister" class="register-button">Register</button>
-      </form>
-    </div>
+  <div class="grid h-screen">
+
+    <div class="flex flex-col gap-6 items-center justify-center">
+    <h1 class="font-serif">Lab Requirements Management</h1>
+    <v-form
+      @submit.prevent="handleLogin($event, isActive)"
+      id="loginForm"
+      class="flex flex-col gap-1 w-80"
+    >
+
+      <v-text-field
+        v-model="data.userID"
+        id="username"
+        name="username"
+        label="User ID"
+        placeholder="Enter your user ID"
+        prepend-inner-icon="mdi-account"
+        variant="outlined"
+        :rules="rules"
+      ></v-text-field>
+
+      <v-text-field
+        v-model="data.userPassword"
+        id="password"
+        name="password"
+        label="Password"
+        :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+        :type="visible ? 'text' : 'password'"
+        placeholder="Enter your password"
+        prepend-inner-icon="mdi-lock-outline"
+        variant="outlined"
+        @click:append-inner="visible = !visible"
+        :rules="rules"
+      ></v-text-field>
+      <v-btn type="submit" color="primary" class="my-2">Login</v-btn>
+      <v-btn type="button" color="primary" variant="tonal" @click="toRegister">Go to Register</v-btn>
+    </v-form>
+        
+  </div>
   </div>
 </template>
-
-<style scoped>
-@import '@/assets/login.css';
-</style>
