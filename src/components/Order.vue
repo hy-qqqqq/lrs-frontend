@@ -150,6 +150,7 @@ const handleGet = async () => {
       :custom-key-filter="customKeyFilter"
       item-value="serialString"
       hide-default-footer
+      multi-sort
       class="shadow-sm max-h-[630px]"
     >
       <template v-slot:item="{ item }">
