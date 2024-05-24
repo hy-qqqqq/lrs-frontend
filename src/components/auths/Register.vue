@@ -1,3 +1,36 @@
+<script setup>
+// Utilities
+import { ref } from 'vue'
+import { registerUser } from '@/utils/service'
+import { useRouter } from 'vue-router';
+// Variables
+const data = ref({
+  userID: '',
+  userPassword: '',
+  dep: '',
+  email: '',
+})
+const errorMessage = ref('')
+const router = useRouter()
+// Functions
+const handleRegister = async () => {
+  registerUser(data.value)
+    .then((res) => {
+      alert('Register successful!')
+      router.push({ path: '/login' })
+    })
+    .catch((err) => {
+      console.error(err);
+      if (err.response && err.response.data && err.response.data.error) {
+        errorMessage.value = err.response.data.error
+      } else {
+        errorMessage.value = 'An error occurred while registering. Please try again.'
+      }
+    })
+  data.value = {}
+}
+</script>
+
 <template>
   <div class="h-screen grid grid-cols-2 justify-items-center items-center">
     <div class="flex flex-row gap-8 items-center">
@@ -13,18 +46,18 @@
       </div>
     <div class="register-container">
       <p class="register-title">Register</p>
-      <form @submit.prevent="register" class="register-form">
+      <form @submit.prevent="handleRegister" class="register-form">
         <div class="form-group">
           <label for="userID">User ID:</label>
-          <input type="text" id="userID" v-model="userID" required>
+          <input type="text" id="userID" v-model="data.userID" required>
         </div>
         <div class="form-group">
           <label for="userPassword">Password:</label>
-          <input type="password" id="userPassword" v-model="userPassword" required>
+          <input type="password" id="userPassword" v-model="data.userPassword" required>
         </div>
         <div class="form-group">
           <label for="department">Department:</label>
-          <select id="department" v-model="department" required>
+          <select id="department" v-model="data.dep" required>
             <option value="" disabled>---Select Department---</option>
             <option value="Fab A">Fab A</option>
             <option value="Fab B">Fab B</option>
@@ -36,7 +69,7 @@
         </div>
         <div class="form-group">
           <label for="email">Email:</label>
-          <input type="email" id="email" v-model="email" required>
+          <input type="email" id="email" v-model="data.email" required>
         </div>
         <button type="submit">Register</button>
       </form>
@@ -44,63 +77,6 @@
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios';
-
-export default {
-  data() {
-    return {
-      userID: '',
-      userPassword: '',
-      department: '',
-      email: '',
-      errorMessage: ''
-    };
-  },
-  methods: {
-    register() {
-      // Check validation
-      if (!this.userID || !this.userPassword || !this.department || !this.email) {
-        this.errorMessage = 'Please fill out all fields.';
-        return;
-      }
-
-      // Sending a request to your backend
-      const data = {
-        userID: this.userID,
-        userPassword: this.userPassword,
-        dep: this.department,
-        email: this.email
-      };
-
-      axios.post('http://localhost:5001/api/register', data)
-        .then(response => {
-          console.log(response.data); // Log the response from the backend
-          // Optionally, you can handle successful registration here
-          // For example, display a success message to the user
-          alert('Register successful!'); // Alert the user about successful registration
-          this.$router.push({ path: '/login' }); // Navigate to the login page after successful registration
-        })
-        .catch(error => {
-          console.error(error);
-          if (error.response && error.response.data && error.response.data.error) {
-            this.errorMessage = error.response.data.error;
-          } else {
-            this.errorMessage = 'An error occurred while registering. Please try again.';
-          }
-        });
-
-      // Clear form fields
-      this.userID = '';
-      this.userPassword = '';
-      this.department = '';
-      this.email = '';
-      this.errorMessage = '';
-    }
-  }
-};
-</script>
 
 <style scoped>
 @import '@/assets/register.css';

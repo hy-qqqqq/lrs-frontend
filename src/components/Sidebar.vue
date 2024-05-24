@@ -1,41 +1,26 @@
 <script setup>
-import axios from 'axios'
+// Utilities
+import { logoutUser } from '@/utils/service'
 import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router';
+// Variables
 const store = useUserStore()
-</script>
-
-<script>
-export default {
-  mounted() {
-    this.setAuthHeader(); // Set the Authorization header when the component is mounted
-  },
-  methods: {
-    getToken() {
-      return sessionStorage.getItem('token'); // Get the token from sessionStorage
-    },
-    setAuthHeader() {
-      const token = this.getToken();
-      if (token) {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      }
-    },
-    logout() {
-      axios.post('http://localhost:5001/api/logout')
-        .then(response => {
-          console.log(response.data);
-          const store = useUserStore()
-          store.clearUser()
-          sessionStorage.removeItem('token');
-          alert('Logout successful!');
-          this.$router.push({ path: '/login' });
-        })
-        .catch(error => {
-          console.error(error);
-          alert('Logout failed.');
-        });
-    }
-  }
-};
+const router = useRouter()
+// Functions
+const handleLogout = async () => {
+  logoutUser()
+    .then((res) => {
+      console.log(res.data);
+      store.clearUser()
+      sessionStorage.removeItem('token');
+      alert('Logout successful!');
+      router.push({ path: '/login' });
+    })
+    .catch((err) => {
+      console.error(err);
+      alert('Logout failed.');
+    })
+}
 </script>
 
 <template>
@@ -70,7 +55,7 @@ export default {
         </a>
       </li>
       <li>
-        <a href="#" @click="logout" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+        <a href="#" @click="handleLogout" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
           <v-icon icon="mdi-logout-variant" color="grey-darken-1"></v-icon>
           <span class="flex-1 ms-3 whitespace-nowrap">Logout</span>
         </a>

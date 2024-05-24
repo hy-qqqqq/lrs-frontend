@@ -16,6 +16,42 @@ const clearSession = () => {
   sessionStorage.clear()
 }
 
+// Register
+export const registerUser = async (data) => {
+  const conf = {headers: {'Content-Type': 'application/json'}}
+  try {
+    const res = await instance.post(`/api/register`, data, conf)
+    return Promise.resolve(res)
+  } catch (error) {
+    const err = error.response ? error.response.data.error : error
+    return Promise.reject(`ERROR registerUser: ${err}`)
+  }
+}
+
+// Login
+export const loginUser = async (data) => {
+  const conf = {headers: {'Content-Type': 'application/json'}}
+  try {
+    const res = await instance.post(`/api/login`, data, conf)
+    return Promise.resolve(res)
+  } catch (error) {
+    const err = error.response ? error.response.data.error : error
+    return Promise.reject(`ERROR loginUser: ${err}`)
+  }
+}
+
+// Logout
+export const logoutUser = async () => {
+  setAuthHeader()
+  try {
+    const res = await instance.post(`/api/logout`)
+    return Promise.resolve(res)
+  } catch (error) {
+    const err = error.response ? error.response.data.error : error
+    return Promise.reject(`ERROR logoutUser: ${err}`)
+  }
+}
+
 // Get orders
 export const getOrders = async () => {
   setAuthHeader()
