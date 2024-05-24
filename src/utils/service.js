@@ -2,8 +2,7 @@ import axios from 'axios'
 
 const instance = axios.create({
   baseURL: 'http://localhost:5001',
-  withCredentials: true,
-  timeout: 1000,
+  timeout: 10000,
 });
 
 const setAuthHeader = () => {
