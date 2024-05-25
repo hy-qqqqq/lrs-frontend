@@ -27,9 +27,6 @@ const setAuthHeader = () => {
   }
 };
 
-// Set Authorization header when the component is mounted
-setAuthHeader();
-
 export default {
   data() {
     return {
@@ -40,6 +37,7 @@ export default {
     };
   },
   mounted() {
+    setAuthHeader();
     this.initializeCharts();
   },
   beforeUnmount() {
