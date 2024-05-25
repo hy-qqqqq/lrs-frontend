@@ -34,7 +34,6 @@ const handleLogin = async (event) => {
 const toRegister = () => {
   router.push({ path: '/register' })
 }
-
 </script>
 
 <template>
@@ -43,9 +42,9 @@ const toRegister = () => {
     <div class="flex flex-col gap-6 items-center justify-center">
     <h1 class="font-serif">Lab Requirements Management</h1>
     <v-form
-      @submit.prevent="handleLogin($event, isActive)"
+      @submit.prevent="handleLogin($event)"
       id="loginForm"
-      class="flex flex-col gap-1 w-80"
+      class="flex flex-col gap-2 w-80"
     >
 
       <v-text-field
