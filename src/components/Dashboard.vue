@@ -10,7 +10,6 @@ import Sidebar from './Sidebar.vue'
 <script>
 // Set up Axios instance with base URL
 const instance = axios.create({
-  baseURL: 'http://localhost:5001',
   timeout: 10000,
 });
 
