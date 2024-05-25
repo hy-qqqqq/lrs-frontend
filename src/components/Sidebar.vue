@@ -31,14 +31,14 @@ const handleLogout = async () => {
     <!-- Routes -->
     <ul class="space-y-2 font-medium">
       <li>
-        <router-link :to="{ name: 'dashboard' }" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-          <v-icon icon="mdi-view-dashboard" color="grey-darken-1"></v-icon>  
+        <router-link :to="{ name: 'dashboard' }" class="flex items-center p-2 text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+          <v-icon icon="mdi-view-dashboard" color="currentColor"></v-icon>  
           <span class="ms-3">Dashboard</span>
         </router-link>
       </li>
       <li>
-        <router-link :to="{ name: 'order' }" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-          <v-icon icon="mdi-list-box" color="grey-darken-1"></v-icon>  
+        <router-link :to="{ name: 'order' }" class="flex items-center p-2 text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+          <v-icon icon="mdi-list-box" color="currentColor"></v-icon>  
           <span class="flex-1 ms-3 whitespace-nowrap">Order</span>
         </router-link>
       </li>
@@ -49,17 +49,17 @@ const handleLogout = async () => {
       <li>
         <v-tooltip :text="store.user.dep" location="bottom">
           <template v-slot:activator="{ props }">
-          <a v-bind="props" href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-            <v-icon icon="mdi-account" color="grey-darken-1"></v-icon>
+          <a v-bind="props" href="#" class="flex items-center p-2 text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+            <v-icon icon="mdi-account" color="currentColor"></v-icon>
             <span class="flex-1 ms-3 whitespace-nowrap">User</span>
-            <v-chip density="compact" :color="depFab?'cyan':'pink'">{{ store.user.id }}</v-chip>
+            <v-chip density="compact" :color="depFab?'primary':'pink-lighten-2'">{{ store.user.id }}</v-chip>
           </a>
           </template>
         </v-tooltip>
       </li>
       <li>
-        <a href="#" @click="handleLogout" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-          <v-icon icon="mdi-logout-variant" color="grey-darken-1"></v-icon>
+        <a href="#" @click="handleLogout" class="flex items-center p-2 text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+          <v-icon icon="mdi-logout-variant" color="currentColor"></v-icon>
           <span class="flex-1 ms-3 whitespace-nowrap">Logout</span>
         </a>
       </li>

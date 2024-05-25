@@ -14,7 +14,7 @@ export const router = createRouter({
     { path: '/dashboard', name: 'dashboard', component: Dashboard, meta: { requiresAuth: true } },
     { path: '/:pathMatch(.*)*', component: NotFound },
   ],
-  linkActiveClass: 'bg-gray-100 dark:bg-gray-700'
+  linkActiveClass: 'bg-blue-100 text-primary'
 });
 
 router.beforeEach((to, from, next) => {

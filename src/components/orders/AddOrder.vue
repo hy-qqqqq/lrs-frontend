@@ -47,7 +47,7 @@ const handleSubmit = async (event, show) => {
 </template>
 <template v-slot:default="{ isActive }">
 <v-sheet class="mx-auto p-5 w-full">
-  <h3 class="pb-5">Add New Order</h3>
+  <h3 class="pb-5 text-primary">Add New Order</h3>
     <v-form
       ref="formInstance"
       @submit.prevent="handleSubmit($event, isActive)"

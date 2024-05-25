@@ -28,6 +28,6 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(vuetify)
-app.config.globalProperties.$filters = filter;
+app.config.globalProperties.$filters = filter
 
 app.mount('#app')

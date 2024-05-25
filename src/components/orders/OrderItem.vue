@@ -1,8 +1,7 @@
 <script setup>
 // Components
 import ItemTime from './items/ItemTime.vue'
-import ItemStatus from './items/ItemStatus.vue'
-import ItemPriority from './items/ItemPriority.vue'
+import { cStatus, cPriority } from '../data/color.spec'
 // Defines
 defineProps({
   item: {
@@ -21,7 +20,7 @@ defineProps({
 
   <!-- Priority -->
   <td class="p-2">
-    <ItemPriority :priority="item.priority"/>
+    <v-chip density="comfortable" size="small" :color="cPriority[item.priority]">{{ item.priority }}</v-chip>
   </td>
 
   <!-- Fabrication -->
@@ -48,14 +47,12 @@ defineProps({
 
   <!-- Issuer -->
   <td class="p-2">
-    <span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-600">
-    {{ item.createdBy }}
-    </span>
+    <v-chip density="comfortable" size="small">{{ item.createdBy }}</v-chip>
   </td>
 
   <!-- Status -->
   <td class="p-2">
-    <ItemStatus :status="item.status"/>
+    <v-chip density="comfortable" size="small" :color="cStatus[item.status]">{{ item.status }}</v-chip>
   </td>
 
 </template>

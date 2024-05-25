@@ -3,6 +3,7 @@
 import { ref } from 'vue'
 import { delOrder, approveOrder, completeOrder, updateOrder, downloadFile } from '@/utils/service'
 import { dataTypes } from '../data/addOrder.spec'
+import { cStatus, cPriority } from '../data/color.spec'
 import { useCounterStore } from '@/stores/counter'
 // Components
 import Alert from '../utils/Alert.vue'
@@ -84,8 +85,8 @@ const handleDownload = async (file) => {
         <v-list-item v-bind="props">
           <span>Priority</span>
           <span>
-            <v-icon icon="mdi-pencil-circle" color="grey-darken-1"></v-icon>
-            {{ show.item.priority }}
+            <v-icon icon="mdi-pencil-circle" color="grey-darken-1" class="mr-2"></v-icon>
+            <v-chip size="small" :color="cPriority[show.item.priority]">{{ show.item.priority }}</v-chip>
           </span>
         </v-list-item>
       </template>
@@ -122,7 +123,7 @@ const handleDownload = async (file) => {
     </v-list-item>
     <v-list-item>
       <span>Status</span>
-      <v-chip size="small">{{ show.item.status }}</v-chip>
+      <v-chip size="small" :color="cStatus[show.item.status]">{{ show.item.status }}</v-chip>
     </v-list-item>
   </v-list>
 
@@ -134,7 +135,7 @@ const handleDownload = async (file) => {
         </p>
       </v-expansion-panel-text>
     </v-expansion-panel>
-    
+
     <v-expansion-panel title="History">
       <v-expansion-panel-text>
         <v-timeline

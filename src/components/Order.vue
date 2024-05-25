@@ -29,7 +29,7 @@ const search = ref('')
 const loading = ref(false)
 const showDetail = ref({show: false})
 const itemFilter = ref({})
-const depLab = Object.values(dataTypes.lab).includes(user.dep)
+const depFab = user.dep.includes('Fab')
 // Functions
 const computedItems = computed(() => {
   loading.value = true
@@ -82,23 +82,24 @@ const handleGet = async () => {
   <div class="ml-64 flex flex-col gap-4">
     <div class="flex flex-row justify-between">
       <h1>Order</h1>
-      <AddOrder v-if="!depLab"/>
+      <AddOrder v-if="depFab"/>
     </div>
     <v-divider class="border-opacity-100"></v-divider>
     <div class="flex flex-row justify-between items-center">
       <v-btn-toggle
         v-model="toggle"
-        divided
+        color="primary"
+        variant="outlined"
       >
         <v-btn value="all">
           <v-icon icon="mdi-clipboard" start></v-icon>
           <span>All</span>
         </v-btn>
-        <v-btn v-if="depLab" value="myLabs">
+        <v-btn v-if="!depFab" value="myLabs">
           <v-icon icon="mdi-clipboard-alert" start></v-icon>
           <span>Lab Orders</span>
         </v-btn>
-        <v-btn v-if="!depLab" value="myOrders">
+        <v-btn v-if="depFab" value="myOrders">
           <v-icon icon="mdi-clipboard-account" start></v-icon>
           <span>My Orders</span>
         </v-btn>
@@ -142,19 +143,19 @@ const handleGet = async () => {
       :headers="headers"
       :items="computedItems"
       :search="search"
-      :itemsPerPage="-1"
+      :itemsPerPage="10"
       :header-props="{ class: 'bg-gray-100 capitalize sticky top-0' }"
       :sort-by="[{ key: 'priority', order: 'desc' }]"
       :loading="loading"
       :custom-filter="defaultFilter"
       :custom-key-filter="customKeyFilter"
       item-value="serialString"
-      hide-default-footer
       multi-sort
-      class="shadow-sm max-h-[630px]"
+      single-select
+      class="max-h-[640px]"
     >
       <template v-slot:item="{ item }">
-        <tr @click="showDetail={show:true, item:item}" class="cursor-pointer transition-all duration-500 hover:bg-gray-50 text-gray-500">
+        <tr @click="showDetail={show:true, item:item}" class="cursor-pointer transition-all duration-500 hover:bg-blue-50 focus:bg-blue-50 text-gray-500">
           <OrderItem :item="item"/>
         </tr>
       </template>

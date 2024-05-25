@@ -280,7 +280,7 @@ export default {
 <template>
   <div>
     <Sidebar />
-    <div class="m-6">
+    <div class="mx-6">
       <div class="ml-64 flex flex-col gap-4">
         <div class="flex justify-center">
           <div class="chart" style="margin-top: 20px; margin-right: 20px; width: 300px; height: 300px;"> <!-- Adjust chart size -->
