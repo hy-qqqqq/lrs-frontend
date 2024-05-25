@@ -1,8 +1,8 @@
 import axios from 'axios'
 
 const instance = axios.create({
-  baseURL: '/api',
-  timeout: 10000,
+  baseURL: '/',
+  timeout: 20000,
 });
 
 const setAuthHeader = () => {
@@ -20,7 +20,7 @@ const clearSession = () => {
 export const registerUser = async (data) => {
   const conf = {headers: {'Content-Type': 'application/json'}}
   try {
-    const res = await instance.post(`/register`, data, conf)
+    const res = await instance.post(`/api/register`, data, conf)
     return Promise.resolve(res)
   } catch (error) {
     const err = error.response ? error.response.data.error : error
@@ -32,7 +32,7 @@ export const registerUser = async (data) => {
 export const loginUser = async (data) => {
   const conf = {headers: {'Content-Type': 'application/json'}}
   try {
-    const res = await instance.post(`/login`, data, conf)
+    const res = await instance.post(`/api/login`, data, conf)
     return Promise.resolve(res)
   } catch (error) {
     const err = error.response ? error.response.data.error : error
@@ -44,7 +44,7 @@ export const loginUser = async (data) => {
 export const logoutUser = async () => {
   setAuthHeader()
   try {
-    const res = await instance.post(`/logout`)
+    const res = await instance.post(`/api/logout`)
     return Promise.resolve(res)
   } catch (error) {
     const err = error.response ? error.response.data.error : error
@@ -56,7 +56,7 @@ export const logoutUser = async () => {
 export const getOrders = async () => {
   setAuthHeader()
   try {
-    const res = await instance.get(`/orders`)
+    const res = await instance.get(`/api/orders`)
     return Promise.resolve(res)
   } catch (error) {
     if (error.response && error.response.status == 401) clearSession()
@@ -70,7 +70,7 @@ export const addOrder = async (formData) => {
   setAuthHeader()
   const conf = {headers: {'Content-Type': 'multipart/form-data'}}
   try {
-    const res = await instance.post(`/orders`, formData, conf)
+    const res = await instance.post(`/api/orders`, formData, conf)
     return Promise.resolve(res)
   } catch (error) {
     if (error.response && error.response.status == 401) clearSession()
@@ -83,7 +83,7 @@ export const addOrder = async (formData) => {
 export const delOrder = async (id) => {
   setAuthHeader()
   try {
-    const res = await instance.delete(`/orders/${id}`)
+    const res = await instance.delete(`/api/orders/${id}`)
     return Promise.resolve(res)
   } catch (error) {
     if (error.response && error.response.status == 401) clearSession()
@@ -98,7 +98,7 @@ export const approveOrder = async (id, action) => {
   const data = {"action": action}
   const conf = {headers: {'Content-Type': 'application/json'}}
   try {
-    const res = await instance.post(`/approve_order/${id}`, data, conf)
+    const res = await instance.post(`/api/approve_order/${id}`, data, conf)
     return Promise.resolve(res)
   } catch (error) {
     if (error.response && error.response.status == 401) clearSession()
@@ -111,7 +111,7 @@ export const approveOrder = async (id, action) => {
 export const completeOrder = async (id) => {
   setAuthHeader()
   try {
-    const res = await instance.post(`/complete_order/${id}`)
+    const res = await instance.post(`/api/complete_order/${id}`)
     return Promise.resolve(res)
   } catch (error) {
     if (error.response && error.response.status == 401) clearSession()
@@ -126,7 +126,7 @@ export const updateOrder = async (id, priority) => {
   const data = {"priority": priority}
   const conf = {headers: {'Content-Type': 'application/json'}}
   try {
-    const res = await instance.put(`/orders/${id}`, data, conf)
+    const res = await instance.put(`/api/orders/${id}`, data, conf)
     return Promise.resolve(res)
   } catch (error) {
     if (error.response && error.response.status == 401) clearSession()
@@ -144,7 +144,7 @@ export const downloadFile = async (filePath) => {
     'responseType': 'blob'
   }}
   try {
-    const res = await instance.post(`/download`, data, conf)
+    const res = await instance.post(`/api/download`, data, conf)
     return Promise.resolve(res)
   } catch (error) {
     if (error.response && error.response.status == 401) clearSession()
