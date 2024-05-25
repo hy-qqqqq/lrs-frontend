@@ -11,8 +11,7 @@ import Sidebar from './Sidebar.vue'
 // Set up Axios instance with base URL
 const instance = axios.create({
   baseURL: 'http://localhost:5001',
-  withCredentials: true,
-  timeout: 1000,
+  timeout: 10000,
 });
 
 // Function to get token from sessionStorage
