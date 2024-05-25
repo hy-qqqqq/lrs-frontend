@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router';
 // Variables
 const store = useUserStore()
 const router = useRouter()
+const depFab = store.user.dep.includes('Fab')
 // Functions
 const handleLogout = async () => {
   logoutUser()
@@ -46,13 +47,15 @@ const handleLogout = async () => {
     <!-- Functions -->
     <ul class="pt-4 mt-4 space-y-2 font-medium border-t border-gray-200 dark:border-gray-700">
       <li>
-        <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-          <v-icon icon="mdi-account" color="grey-darken-1"></v-icon>
-          <span class="flex-1 ms-3 whitespace-nowrap">User</span>
-          <span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">
-            {{ store.user.id }}
-          </span>
-        </a>
+        <v-tooltip :text="store.user.dep" location="bottom">
+          <template v-slot:activator="{ props }">
+          <a v-bind="props" href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+            <v-icon icon="mdi-account" color="grey-darken-1"></v-icon>
+            <span class="flex-1 ms-3 whitespace-nowrap">User</span>
+            <v-chip density="compact" :color="depFab?'cyan':'pink'">{{ store.user.id }}</v-chip>
+          </a>
+          </template>
+        </v-tooltip>
       </li>
       <li>
         <a href="#" @click="handleLogout" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
