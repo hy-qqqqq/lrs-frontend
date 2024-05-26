@@ -57,9 +57,11 @@ const handleDownload = async (file) => {
     .then((res) => {
       let blob = new Blob([res.data], { type: res.headers['content-type'] })
       let link = document.createElement('a')
-      link.href = window.URL.createObjectURL(blob)
+      let url = window.URL.createObjectURL(blob)
+      link.href = url
       link.download = file
       link.click()
+      window.URL.revokeObjectURL(url)
     })
     .catch((err) => showAlert.value = {show: true, success: false, message: err})
 }

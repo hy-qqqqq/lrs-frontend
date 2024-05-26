@@ -139,10 +139,12 @@ export const updateOrder = async (id, priority) => {
 export const downloadFile = async (filePath) => {
   setAuthHeader()
   const data = {"filePath": filePath}
-  const conf = {headers: {
-    'Content-Type': 'application/json',
-    'responseType': 'blob'
-  }}
+  const conf = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    responseType: 'blob'
+  }
   try {
     const res = await instance.post(`/api/download`, data, conf)
     return Promise.resolve(res)
