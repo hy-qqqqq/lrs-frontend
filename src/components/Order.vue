@@ -84,9 +84,9 @@ const handleClick = (event, {item}) => {
 <OrderDetail v-model:show="showDetail"/>
 <Sidebar v-model:drawer="drawer"/>
 
-<div class="m-6">
+<div class="m-3 md:m-6">
   <div class="md:ml-64 flex flex-col gap-4">
-    <div class="flex justify-between">
+    <div class="flex justify-between items-center">
       <div class="flex items-center gap-2">
         <v-btn v-if="smAndDown" icon="mdi-text" variant="text" @click.stop="drawer = !drawer"></v-btn>
         <h1>Order</h1>
@@ -94,30 +94,39 @@ const handleClick = (event, {item}) => {
       <AddOrder v-if="depFab"/>
     </div>
     <v-divider class="border-opacity-100"></v-divider>
-    <div class="flex flex-row justify-between items-center">
+    <div class="flex justify-between items-center">
       <v-btn-toggle
         v-model="toggle"
         color="primary"
         variant="outlined"
       >
         <v-btn value="all">
-          <v-icon icon="mdi-clipboard" start></v-icon>
-          <span>All</span>
+          <v-icon icon="mdi-clipboard"></v-icon>
+          <span v-if="!smAndDown" class="ms-1">All</span>
         </v-btn>
         <v-btn v-if="!depFab" value="myLabs">
-          <v-icon icon="mdi-clipboard-alert" start></v-icon>
-          <span>Lab Orders</span>
+          <v-icon icon="mdi-clipboard-alert"></v-icon>
+          <span v-if="!smAndDown" class="ms-1">Lab Orders</span>
         </v-btn>
         <v-btn v-if="depFab" value="myOrders">
-          <v-icon icon="mdi-clipboard-account" start></v-icon>
-          <span>My Orders</span>
+          <v-icon icon="mdi-clipboard-account"></v-icon>
+          <span v-if="!smAndDown" class="ms-1">My Orders</span>
         </v-btn>
         <v-btn value="approvals">
           <v-icon icon="mdi-clipboard-check" start></v-icon>
-          <span>Approvals</span>
+          <span v-if="!smAndDown" class="ms-1">Approvals</span>
         </v-btn>
       </v-btn-toggle>
-      <div class="flex flex-row items-center gap-3">
+      <div class="flex flex-row items-center gap-1 w-40 md:w-80">
+        <v-text-field 
+          v-model="search" 
+          label="Search..." 
+          density="comfortable"
+          variant="outlined"
+          hide-details
+          clearable
+          class="w-60"
+        ></v-text-field>
         <v-menu :close-on-content-click="false" transition="slide-y-transition" location="left">
           <template v-slot:activator="{ props }">
             <v-btn v-bind="props" icon="mdi-filter-multiple-outline" variant="plain"></v-btn>
@@ -137,15 +146,6 @@ const handleClick = (event, {item}) => {
             </div>
           </div>
         </v-menu>
-        <v-text-field 
-          v-model="search" 
-          label="Type to search..." 
-          density="compact"
-          variant="outlined"
-          hide-details
-          clearable
-          class="w-60"
-        ></v-text-field>
       </div>
     </div>
     <v-data-table
@@ -163,7 +163,7 @@ const handleClick = (event, {item}) => {
       multi-sort
       single-select
       sticky
-      class="max-h-[640px]"
+      class="md:max-h-[640px] max-h-[670px]"
       @click:row="handleClick"
     >
       <template v-slot:item.priority="{ value }">
