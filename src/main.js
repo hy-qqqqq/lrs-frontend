@@ -18,6 +18,16 @@ const vuetify = createVuetify({
   treeShake: true,
   icons: {
     iconfont: 'mdi',
+  },
+  display: {
+    mobileBreakpoint: 'sm',
+    thresholds: {
+      xs: 0,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280
+    },
   }
 })
 

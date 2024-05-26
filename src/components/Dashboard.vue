@@ -1,10 +1,13 @@
 <script setup>
-import { ref, reactive } from "vue";
-import { Chart } from 'chart.js/auto'; // Correct import
-import ApexCharts from 'apexcharts';
+import { ref, reactive } from "vue"
+import { useDisplay } from 'vuetify'
+import { Chart } from 'chart.js/auto' // Correct import
+import ApexCharts from 'apexcharts'
 import axios from 'axios';
 // Components
 import Sidebar from './Sidebar.vue'
+const { smAndDown } = useDisplay()
+const drawer = ref(!smAndDown.value)
 </script>
 
 <script>
@@ -278,38 +281,41 @@ export default {
 
 
 <template>
-  <div>
-    <Sidebar />
-    <div class="mx-6">
-      <div class="ml-64 flex flex-col gap-4">
-        <div class="flex justify-center">
-          <div class="chart" style="margin-top: 20px; margin-right: 20px; width: 300px; height: 300px;"> <!-- Adjust chart size -->
-            <h2>Overall Orders</h2>
-            <div id="donutChart"></div> <!-- Add a div to hold the ApexCharts donut chart -->
-          </div>
-          <div class="chart pie-chart" style="margin-top: 20px; width: 300px; height: 300px;">
-            <h2>Used Space Capacity</h2>
-            <canvas id="usedSpaceChart" style="padding: 20px;"></canvas>
-          </div>
-          <!-- Removed unused canvas element -->
-        </div>
-        <div class="flex flex-row justify-between">
-          <div class="chart" style="margin-right: 20px;">
-            <h2>Priority</h2>
-            <div id="priorityChart"></div>
-          </div>
-          <div class="chart" style="margin-right: 20px;">
-            <h2>Factory</h2>
-            <div id="factoryChart"></div> 
-          </div>
-          <div class="chart">
-            <h2>Lab</h2>
-            <div id="labChart"></div> 
-          </div>
-        </div>
+<Sidebar v-model:drawer="drawer"/>
+
+<div class="m-6">
+  <div class="md:ml-64 flex flex-col gap-4">
+    <div class="flex items-center gap-2">
+      <v-btn v-if="smAndDown" icon="mdi-text" variant="text" @click.stop="drawer = !drawer"></v-btn>
+      <h1>Dashboard</h1>
+    </div>
+    <div class="flex justify-center">
+      <div class="chart" style="margin-top: 20px; margin-right: 20px; width: 300px; height: 300px;"> <!-- Adjust chart size -->
+        <h2>Overall Orders</h2>
+        <div id="donutChart"></div> <!-- Add a div to hold the ApexCharts donut chart -->
+      </div>
+      <div class="chart pie-chart" style="margin-top: 20px; width: 300px; height: 300px;">
+        <h2>Used Space Capacity</h2>
+        <canvas id="usedSpaceChart" style="padding: 20px;"></canvas>
+      </div>
+      <!-- Removed unused canvas element -->
+    </div>
+    <div class="flex flex-row justify-between">
+      <div class="chart" style="margin-right: 20px;">
+        <h2>Priority</h2>
+        <div id="priorityChart"></div>
+      </div>
+      <div class="chart" style="margin-right: 20px;">
+        <h2>Factory</h2>
+        <div id="factoryChart"></div> 
+      </div>
+      <div class="chart">
+        <h2>Lab</h2>
+        <div id="labChart"></div> 
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <style scoped>

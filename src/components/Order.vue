@@ -32,6 +32,7 @@ const loading = ref(false)
 const showDetail = ref({show: false})
 const itemFilter = ref({})
 const depFab = user.dep.includes('Fab')
+const drawer = ref(!smAndDown.value)
 // Functions
 const computedItems = computed(() => {
   loading.value = true
@@ -81,12 +82,15 @@ const handleClick = (event, {item}) => {
 <template>
 
 <OrderDetail v-model:show="showDetail"/>
-<Sidebar />
+<Sidebar v-model:drawer="drawer"/>
 
 <div class="m-6">
-  <div class="ml-64 flex flex-col gap-4">
-    <div class="flex flex-row justify-between">
-      <h1>Order</h1>
+  <div class="md:ml-64 flex flex-col gap-4">
+    <div class="flex justify-between">
+      <div class="flex items-center gap-2">
+        <v-btn v-if="smAndDown" icon="mdi-text" variant="text" @click.stop="drawer = !drawer"></v-btn>
+        <h1>Order</h1>
+      </div>
       <AddOrder v-if="depFab"/>
     </div>
     <v-divider class="border-opacity-100"></v-divider>
