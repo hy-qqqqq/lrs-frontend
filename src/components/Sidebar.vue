@@ -42,7 +42,7 @@ const handleLogout = async () => {
           </router-link>
         </li>
         <li>
-          <router-link :to="{ name: 'order' }" class="flex items-center p-2 text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+          <router-link :to="{ path: '/order' }" class="flex items-center p-2 text-gray-700 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
             <v-icon icon="mdi-list-box" color="currentColor"></v-icon>  
             <span class="flex-1 ms-3 whitespace-nowrap">Order</span>
           </router-link>

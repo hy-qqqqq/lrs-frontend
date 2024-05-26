@@ -21,8 +21,13 @@ export const router = createRouter({
 router.beforeEach((to, from, next) => {
   const isAuthenticated = sessionStorage.getItem('token')
   if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
-    toast.info('Please login again')
-    setTimeout(() => {next({ name: 'login' })}, 3000)
+    if (to.fullPath!=='/') {
+      toast.info('Please login again')
+      setTimeout(() => {next({ name: 'login' })}, 3000)
+    }
+    else {
+      next({ name: 'login' })
+    }
   } else {
     next()
   }
