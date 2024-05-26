@@ -1,16 +1,16 @@
 import moment from "moment"
 
 export const headers = [
-  { key: 'serialString', title: 'Serial no.'},
+  { key: 'serialString', title: 'Serial No.'},
   { key: 'priority', title: 'Priority' },
   { key: 'factory', title: 'Fabrication' },
   { key: 'lab', title: 'Laboratory' },
-  { key: 'createdAt', title: 'Create time',
+  { key: 'createdAt', title: 'Create Time',
     sort: (a, b) => {
       return moment(a).diff(moment(b))
     }
   },
-  { key: 'updatedAt', title: 'Update time',
+  { key: 'updatedAt', title: 'Update Time',
     value: item => {
       if (item.status == 'Issued') return item.createdAt
       else if (item.status == 'Approved' || item.status == 'Rejected') return item.approvedAt

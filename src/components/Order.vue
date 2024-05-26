@@ -6,8 +6,9 @@ import { headers, dataTypes } from './data/order.spec.js'
 import { getOrders } from '@/utils/service.js'
 import { useUserStore } from '@/stores/user.js'
 import { useCounterStore } from '@/stores/counter.js'
+import { useDisplay } from 'vuetify'
+import { cStatus, cPriority } from './data/color.spec'
 // Components
-import OrderItem from './orders/OrderItem.vue'
 import OrderDetail from './orders/OrderDetail.vue'
 import Sidebar from './Sidebar.vue'
 import AddOrder from './orders/AddOrder.vue'
@@ -15,6 +16,7 @@ import AddOrder from './orders/AddOrder.vue'
 const counterStore = useCounterStore()
 const { count } = storeToRefs(counterStore)
 const { user } = useUserStore()
+const { smAndDown } = useDisplay()
 // Hooks
 onMounted(async () => {
   await handleGet()
@@ -70,6 +72,9 @@ const handleGet = async () => {
   })
   // set
   items.value = data
+}
+const handleClick = (event, {item}) => {
+  showDetail.value = {show:true, item:item}
 }
 </script>
 
@@ -144,23 +149,41 @@ const handleGet = async () => {
       :items="computedItems"
       :search="search"
       :itemsPerPage="10"
-      :header-props="{ class: 'bg-gray-100 capitalize sticky top-0' }"
+      :row-props="{ class:'transition-all duration-100 hover:bg-blue-50 text-gray-700' }"
       :sort-by="[{ key: 'priority', order: 'desc' }]"
       :loading="loading"
+      :mobile="smAndDown"
       :custom-filter="defaultFilter"
       :custom-key-filter="customKeyFilter"
       item-value="serialString"
       multi-sort
       single-select
+      sticky
       class="max-h-[640px]"
+      @click:row="handleClick"
     >
-      <template v-slot:item="{ item }">
-        <tr @click="showDetail={show:true, item:item}" class="cursor-pointer transition-all duration-500 hover:bg-blue-50 focus:bg-blue-50 text-gray-500">
-          <OrderItem :item="item"/>
-        </tr>
+      <template v-slot:item.priority="{ value }">
+        <v-chip density="comfortable" size="small" :color="cPriority[value]">{{ value }}</v-chip>
+      </template>
+      <template v-slot:item.createdAt="{ value }">
+        {{ $filters.formatDate(value, 'LL') }}<br>
+        <p class="text-xs">
+        {{ $filters.formatDate(value, 'HH:mm:ss') }}
+        </p>
+      </template>
+      <template v-slot:item.updatedAt="{ value }">
+        {{ $filters.formatDate(value, 'LL') }}<br>
+        <p class="text-xs">
+        {{ $filters.formatDate(value, 'HH:mm:ss') }}
+        </p>
+      </template>
+      <template v-slot:item.status="{ value }">
+        <v-chip density="comfortable" size="small" :color="cStatus[value]">{{ value }}</v-chip>
+      </template>
+      <template v-slot:item.createdBy="{ value }">
+        <v-chip density="comfortable" size="small">{{ value }}</v-chip>
       </template>
     </v-data-table>
-
   </div>
 </div>
 
@@ -172,5 +195,8 @@ div.v-list-item__content > div.v-list-item-title {
 }
 div.v-list-item--density-default.v-list-item--one-line {
   min-height: 14px;
+}
+th.v-data-table__th {
+  background-color: #F3F4F6;
 }
 </style>
