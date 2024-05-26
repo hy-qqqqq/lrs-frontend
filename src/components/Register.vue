@@ -2,7 +2,8 @@
 // Utilities
 import { ref } from 'vue'
 import { registerUser } from '@/utils/service'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
 // Variables
 const data = ref({
   userID: '',
@@ -22,11 +23,11 @@ const handleRegister = async (event) => {
   if (res.valid) {
     registerUser(data.value)
       .then((res) => {
-        alert('Register successful!')
-        router.push({ path: '/login' })
+        toast.success(res.data.message)
+        setTimeout(() => {toLogin()}, 1000)        
       })
       .catch((err) => {
-        console.error(err);
+        toast.error(err)
       })
     data.value = {}
   }

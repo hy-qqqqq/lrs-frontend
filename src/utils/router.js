@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { toast } from 'vue3-toastify'
 import Order from '../components/Order.vue'
 import Dashboard from '../components/Dashboard.vue'
 import Login from '../components/Login.vue'
@@ -19,10 +20,10 @@ export const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const isAuthenticated = sessionStorage.getItem('token')
-
   if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
-    next({ name: 'login' });
+    toast.info('Please login again')
+    setTimeout(() => {next({ name: 'login' })}, 3000)
   } else {
-    next();
+    next()
   }
 });

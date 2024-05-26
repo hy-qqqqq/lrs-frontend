@@ -3,7 +3,8 @@
 import { ref } from 'vue'
 import { loginUser } from '@/utils/service'
 import { useUserStore } from '@/stores/user'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
 // Variables
 const data = ref({
   userID: '',
@@ -19,14 +20,13 @@ const handleLogin = async (event) => {
   if (res.valid) {
     loginUser(data.value)
       .then((res) => {
+        toast.success(res.data.message)
         store.setUser(res.data)
         sessionStorage.setItem('token', res.data.access_token)
-        alert('Login successful!')
-        router.push({ path: '/order' })
+        setTimeout(() => {router.push({ path: '/order' })}, 1000)
       })
       .catch((err) => {
-        console.error(err);
-        alert('Invalid user ID or password.')
+        toast.error(err)
       })
     data.value = {}
   }

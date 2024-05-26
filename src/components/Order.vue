@@ -8,6 +8,7 @@ import { useUserStore } from '@/stores/user.js'
 import { useCounterStore } from '@/stores/counter.js'
 import { useDisplay } from 'vuetify'
 import { cStatus, cPriority } from './data/color.spec'
+import { toast } from 'vue3-toastify'
 // Components
 import OrderDetail from './orders/OrderDetail.vue'
 import Sidebar from './Sidebar.vue'
@@ -64,15 +65,19 @@ const customKeyFilter = {
 }
 const handleGet = async () => {
   loading.value = true
-  const { data } = await getOrders()
-  // preprocess display names
-  data.map(function (d) {
-    d.priority = dataTypes.priority[d.priority]
-    d.lab = dataTypes.lab[d.lab]
-    return d
-  })
-  // set
-  items.value = data
+  getOrders()
+    .then ((res) => {
+      const data = res.data
+        data.map(function (d) {
+          d.priority = dataTypes.priority[d.priority]
+          d.lab = dataTypes.lab[d.lab]
+          return d
+        })
+      items.value = data
+    })
+    .catch((err) => {
+      toast.error(err)
+    })
 }
 const handleClick = (event, {item}) => {
   showDetail.value = {show:true, item:item}

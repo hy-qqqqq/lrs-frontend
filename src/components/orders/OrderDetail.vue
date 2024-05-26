@@ -5,11 +5,9 @@ import { delOrder, approveOrder, completeOrder, updateOrder, downloadFile } from
 import { dataTypes } from '../data/addOrder.spec'
 import { cStatus, cPriority } from '../data/color.spec'
 import { useCounterStore } from '@/stores/counter'
-// Components
-import Alert from '../utils/Alert.vue'
+import { toast } from 'vue3-toastify'
 // Variables
 const show = defineModel('show', {required: true})
-const showAlert = ref({show: false})
 const store = useCounterStore()
 const refPriority = ref('regular')
 // Functions
@@ -18,37 +16,37 @@ const getItemNo = () => show.value.item.serialNo
 const handleDelete = async () => {
   delOrder(getItemNo())
     .then((res) => {
-      showAlert.value = {show: true, success: true, message: res.data.message}
+      toast.success(res.data.message)
       store.increment()
     })
-    .catch((err) => showAlert.value = {show: true, success: false, message: err})
+    .catch((err) => toast.error(err))
   closeAll()
 }
 const handleApprove = async (action) => {
   approveOrder(getItemNo(), action)
     .then((res) => {
-      showAlert.value = {show: true, success: true, message: res.data.message}
+      toast.success(res.data.message)
       store.increment()
     })
-    .catch((err) => showAlert.value = {show: true, success: false, message: err})
+    .catch((err) => toast.error(err))
   closeAll()
 }
 const handleComplete = async () => {
   completeOrder(getItemNo())
     .then((res) => {
-      showAlert.value = {show: true, success: true, message: res.data.message}
+      toast.success(res.data.message)
       store.increment()
     })
-    .catch((err) => showAlert.value = {show: true, success: false, message: err})
+    .catch((err) => toast.error(err))
   closeAll()
 }
 const handleUpdate = async (show) => {
   updateOrder(getItemNo(), refPriority.value)
     .then((res) => {
-      showAlert.value = {show: true, success: true, message: res.data.message}
+      toast.success(res.data.message)
       store.increment()
     })
-    .catch((err) => showAlert.value = {show: true, success: false, message: err})
+    .catch((err) => toast.error(err))
   show.value = false
   closeAll()
 }
@@ -63,13 +61,11 @@ const handleDownload = async (file) => {
       link.click()
       window.URL.revokeObjectURL(url)
     })
-    .catch((err) => showAlert.value = {show: true, success: false, message: err})
+    .catch((err) => toast.error(err))
 }
 </script>
 
 <template>
-
-<Alert :show="showAlert"/>
 
 <v-dialog v-model="show.show" max-width="600" max-height="700" scrollable>
 

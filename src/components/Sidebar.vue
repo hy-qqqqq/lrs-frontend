@@ -3,6 +3,7 @@
 import { logoutUser } from '@/utils/service'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
 // Defines
 const drawer = defineModel('drawer', {required: true})
 // Variables
@@ -13,15 +14,13 @@ const depFab = store.user.dep.includes('Fab')
 const handleLogout = async () => {
   logoutUser()
     .then((res) => {
-      console.log(res.data);
+      toast.success(res.data.message)
       store.clearUser()
-      sessionStorage.removeItem('token');
-      alert('Logout successful!');
-      router.push({ path: '/login' });
+      sessionStorage.removeItem('token')
+      setTimeout(() => {router.push({ path: '/login' })}, 1000)
     })
     .catch((err) => {
-      console.error(err);
-      alert('Logout failed.');
+      toast.error(err)
     })
 }
 </script>

@@ -1,9 +1,10 @@
 <script setup>
 import { ref, reactive } from "vue"
 import { useDisplay } from 'vuetify'
+import { toast } from 'vue3-toastify'
 import { Chart } from 'chart.js/auto' // Correct import
 import ApexCharts from 'apexcharts'
-import axios from 'axios';
+import axios from 'axios'
 // Components
 import Sidebar from './Sidebar.vue'
 const { smAndDown } = useDisplay()
@@ -232,7 +233,7 @@ export default {
         })
         .catch(error => {
           console.error(error);
-          alert('Failed to fetch order counts.');
+          toast.error('Failed to fetch order counts.');
         });
     },
     initializePieCharts(usedSpace, totalSpace) {
@@ -272,7 +273,7 @@ export default {
         })
         .catch(error => {
           console.error('Failed to fetch used space data:', error);
-          alert('Failed to fetch used space data.');
+          toast.error('Failed to fetch used space data.');
         });
     }
   }

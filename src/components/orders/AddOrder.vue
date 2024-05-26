@@ -4,12 +4,10 @@ import { ref } from 'vue'
 import { dataTypes } from '../data/addOrder.spec.js'
 import { addOrder } from '@/utils/service.js'
 import { useCounterStore } from '@/stores/counter.js'
-// Components
-import Alert from '../utils/Alert.vue'
+import { toast } from 'vue3-toastify'
 // Stores
 const store = useCounterStore()
 // Variables
-const showAlert = ref({show: false})
 const rules = [value => !!value || "Required."]
 const form = ref({})
 const formInstance = ref()
@@ -24,10 +22,10 @@ const handleSubmit = async (event, show) => {
     addOrder(formData)
       .then((res) => {
         show.value = false
-        showAlert.value = {show: true, success: true, message: res.data.message}
+        toast.success(res.data.message)
         store.increment()
       })
-      .catch((err) => showAlert.value = {show: true, success: false, message: err})
+      .catch((err) => toast.error(err))
     formInstance.value.reset()
   }
 }
@@ -35,7 +33,6 @@ const handleSubmit = async (event, show) => {
 
 <template>
 
-<Alert :show="showAlert"/>
 <v-dialog max-width="500">
 
 <template v-slot:activator="{ props: activatorProps }">
