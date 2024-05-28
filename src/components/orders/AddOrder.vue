@@ -1,7 +1,7 @@
 <script setup>
 // Utilities
 import { ref } from 'vue'
-import { dataTypes } from '../data/addOrder.spec.js'
+import { dataTypes } from '../data/addOrder.data.js'
 import { addOrder } from '@/utils/service.js'
 import { useCounterStore } from '@/stores/counter.js'
 import { toast } from 'vue3-toastify'

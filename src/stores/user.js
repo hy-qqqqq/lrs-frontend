@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { useSessionStorage } from '@vueuse/core'
-import { dataTypes } from '@/components/data/order.spec'
+import { dataTypes } from '@/components/data/order.data'
 
 export const useUserStore = defineStore('user', () => {
   const user = useSessionStorage('user', {})

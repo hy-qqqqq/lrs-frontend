@@ -2,12 +2,12 @@
 // Utilities
 import { storeToRefs } from 'pinia'
 import { ref, computed, onMounted, watch } from 'vue'
-import { headers, dataTypes } from './data/order.spec.js'
+import { headers, dataTypes } from './data/order.data.js'
 import { getOrders } from '@/utils/service.js'
 import { useUserStore } from '@/stores/user.js'
 import { useCounterStore } from '@/stores/counter.js'
 import { useDisplay } from 'vuetify'
-import { cStatus, cPriority } from './data/color.spec'
+import { cStatus, cPriority } from './data/color.data.js'
 import { toast } from 'vue3-toastify'
 // Components
 import OrderDetail from './orders/OrderDetail.vue'

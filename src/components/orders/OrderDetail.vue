@@ -2,8 +2,8 @@
 // Utilities
 import { ref } from 'vue'
 import { delOrder, approveOrder, completeOrder, updateOrder, downloadFile } from '@/utils/service'
-import { dataTypes } from '../data/addOrder.spec'
-import { cStatus, cPriority } from '../data/color.spec'
+import { dataTypes } from '../data/addOrder.data'
+import { cStatus, cPriority } from '../data/color.data'
 import { useCounterStore } from '@/stores/counter'
 import { toast } from 'vue3-toastify'
 // Variables
