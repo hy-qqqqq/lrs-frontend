@@ -49,7 +49,6 @@ export default {
   },
   methods: {
     initializeCharts() {
-      this.fetchUsedSpace();
       this.initializePriorityCharts();
       this.initializeFactoryCharts();
       this.initializeLabCharts();
@@ -235,46 +234,6 @@ export default {
           console.error(error);
           toast.error('Failed to fetch order counts.');
         });
-    },
-    initializePieCharts(usedSpace, totalSpace) {
-      // Initialize and update chart for used space capacity
-      this.destroyCharts(); // Ensure any existing chart is destroyed before creating a new one
-      const remainingSpace = totalSpace - usedSpace;
-      const usedSpaceChartCtx = document.getElementById('usedSpaceChart').getContext('2d');
-      this.usedSpaceChart = new Chart(usedSpaceChartCtx, {
-        type: 'pie',
-        data: {
-          labels: ['Used Space', 'Remaining Space'],
-          datasets: [{
-            label: 'Storage Capacity',
-            data: [usedSpace, remainingSpace],
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.6)',
-              'rgba(54, 162, 235, 0.6)',
-            ],
-          }],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false, // Prevent the chart from maintaining aspect ratio
-        },
-      });
-    },
-    fetchUsedSpace() {
-      const totalSpace = 100;
-      instance.get('/api/used_space')
-        .then(response => {
-          console.log('Response data:', response.data); // Add logging
-          const usedSpace = parseInt(response.data.used, 10);
-          if (isNaN(usedSpace)) {
-            throw new Error('Invalid used space value');
-          }
-          this.initializePieCharts(usedSpace, totalSpace);
-        })
-        .catch(error => {
-          console.error('Failed to fetch used space data:', error);
-          toast.error('Failed to fetch used space data.');
-        });
     }
   }
 }
@@ -295,10 +254,7 @@ export default {
         <h2>Overall Orders</h2>
         <div id="donutChart"></div> <!-- Add a div to hold the ApexCharts donut chart -->
       </div>
-      <div class="chart pie-chart" style="margin-top: 20px; width: 300px; height: 300px;">
-        <h2>Used Space Capacity</h2>
-        <canvas id="usedSpaceChart" style="padding: 20px;"></canvas>
-      </div>
+
       <!-- Removed unused canvas element -->
     </div>
     <div class="flex flex-row justify-between">
