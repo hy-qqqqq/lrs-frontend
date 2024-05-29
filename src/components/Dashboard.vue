@@ -34,7 +34,6 @@ const setAuthHeader = () => {
 export default {
   data() {
     return {
-      usedSpaceChart: null,
       priorityChart: null,
       factoryChart: null,
       labChart: null,
@@ -55,10 +54,6 @@ export default {
       this.initializeDonutCharts();
     },
     destroyCharts() {
-      if (this.usedSpaceChart) {
-        this.usedSpaceChart.destroy();
-        this.usedSpaceChart = null;
-      };
       if (this.priorityChart) this.priorityChart.destroy();
       if (this.factoryChart) this.factoryChart.destroy();
       if (this.labChart) this.labChart.destroy();
