@@ -116,12 +116,16 @@ const handleDownload = async (file) => {
       <span>{{ show.item.lab }}</span>
     </v-list-item>
     <v-list-item>
+      <span>Status</span>
+      <v-chip size="small" :color="cStatus[show.item.status]">{{ show.item.status }}</v-chip>
+    </v-list-item>
+    <v-list-item>
       <span>Issuer</span>
       <v-chip size="small">{{ show.item.createdBy }}</v-chip>
     </v-list-item>
-    <v-list-item>
-      <span>Status</span>
-      <v-chip size="small" :color="cStatus[show.item.status]">{{ show.item.status }}</v-chip>
+    <v-list-item v-if="show.item.approvedBy">
+      <span>Approver</span>
+      <v-chip size="small">{{ show.item.approvedBy }}</v-chip>
     </v-list-item>
   </v-list>
 
