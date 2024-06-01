@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "test:unit": "vitest",
     "test:e2e": "start-server-and-test preview http://localhost:4173 'cypress run --e2e'",
+    "test:report": "start-server-and-test preview http://localhost:4173 'cypress run --reporter cypress-mochawesome-reporter'",
     "test:e2e:dev": "start-server-and-test 'vite dev --port 4173' http://localhost:4173 'cypress open --e2e'",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/"
@@ -35,6 +36,7 @@
     "@vue/test-utils": "^2.4.5",
     "autoprefixer": "^10.4.19",
     "cypress": "^13.10.0",
+    "cypress-mochawesome-reporter": "^3.8.2",
     "eslint": "^8.57.0",
     "eslint-plugin-cypress": "^2.15.1",
     "eslint-plugin-vue": "^9.23.0",

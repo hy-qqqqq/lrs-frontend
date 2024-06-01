@@ -43,4 +43,17 @@ describe('Login Tests', () => {
     cy.get('button').contains('Go to Register').click()
     cy.url().should('include', '/register')
   })
+
+  it('Should login successfully and redirect to /order', () => {
+    cy.fixture('user').then((userData) => {
+      const user = userData.users[0];
+      cy.visit('/login');
+      cy.get('input[name="username"]').type(user.username);
+      cy.get('input[name="password"]').type(user.password);
+      cy.get('button[type="submit"]').click();
+      cy.url().should('include', '/order');
+    });
+
+  })
+
 })

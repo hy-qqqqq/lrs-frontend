@@ -1,4 +1,40 @@
 {
-  "username": "789",
-  "password": "789"
+  "users": [
+    {
+      "username": "user_fabA",
+      "password": "password",
+      "department": "Fab A",
+      "email": "tonywon.cs08@nycu.edu.tw"
+    },
+    {
+      "username": "user_fabB",
+      "password": "password",
+      "department": "Fab B",
+      "email": "tonywon.cs08@nycu.edu.tw"
+    },
+    {
+      "username": "user_fabC",
+      "password": "password",
+      "department": "Fab C",
+      "email": "tonywon.cs08@nycu.edu.tw"
+    },
+    {
+      "username": "user_chemical",
+      "password": "password",
+      "department": "chemical",
+      "email": "tonywon.cs08@nycu.edu.tw"
+    },
+    {
+      "username": "user_surface",
+      "password": "password",
+      "department": "surface",
+      "email": "tonywon.cs08@nycu.edu.tw"
+    },
+    {
+      "username": "user_composition",
+      "password": "password",
+      "department": "composition",
+      "email": "tonywon.cs08@nycu.edu.tw"
+    }
+  ]
 }
