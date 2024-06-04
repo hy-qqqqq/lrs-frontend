@@ -90,13 +90,16 @@ const handleClick = (event, {item}) => {
 <Sidebar v-model:drawer="drawer"/>
 
 <div class="m-3 md:m-6">
-  <div class="md:ml-64 flex flex-col gap-4">
+  <div class="md:ml-64 flex flex-col gap-3">
     <div class="flex justify-between items-center">
       <div class="flex items-center gap-2">
         <v-btn v-if="smAndDown" icon="mdi-text" variant="text" @click.stop="drawer = !drawer"></v-btn>
         <h1>Order</h1>
       </div>
-      <AddOrder v-if="depFab"/>
+      <div class="flex items-center gap-2">
+        <AddOrder v-if="depFab"/>
+        <v-btn icon="mdi-refresh" variant="text" color="primary" @click.stop="handleGet"></v-btn>
+      </div>
     </div>
     <v-divider class="border-opacity-100"></v-divider>
     <div class="flex justify-between items-center">
