@@ -77,7 +77,7 @@ export default {
         });
 
         const priorityChartOptions = {
-          chart: { height: 380, type: 'bar', stacked: true },
+          chart: { height: 320, type: 'bar', stacked: true },
           plotOptions: { bar: { columnWidth: '30%', horizontal: false } },
           series: [
             { name: 'Regular', data: Object.values(priorityData.regular), color: 'rgba(255, 99, 132, 0.6)' },
@@ -112,7 +112,7 @@ export default {
         });
 
         const factoryChartOptions = {
-          chart: { height: 380, type: 'bar', stacked: true },
+          chart: { height: 320, type: 'bar', stacked: true },
           plotOptions: { bar: { columnWidth: '30%', horizontal: false } },
           series: [
             { name: 'Fab A', data: Object.values(factoryData['Fab A']), color: 'rgba(255, 99, 132, 0.6)' },
@@ -148,7 +148,7 @@ export default {
         });
 
         const labChartOptions = {
-          chart: { height: 380, type: 'bar', stacked: true },
+          chart: { height: 320, type: 'bar', stacked: true },
           plotOptions: { bar: { columnWidth: '30%', horizontal: false } },
           series: [
             { name: 'Chemistry Lab', data: Object.values(labData.chemical), color: 'rgba(255, 99, 132, 0.6)' },
@@ -182,9 +182,8 @@ export default {
           pie: {
             customScale: 0.8,
             donut: {
-              size: '75%',
+              size: '70%',
             },
-            offsetY: 20,
           },
           stroke: {
             colors: undefined
@@ -239,29 +238,27 @@ export default {
 <Sidebar v-model:drawer="drawer"/>
 
 <div class="m-6">
-  <div class="md:ml-64 flex flex-col gap-4">
+  <div class="md:ml-64 flex flex-col gap-3">
     <div class="flex items-center gap-2">
       <v-btn v-if="smAndDown" icon="mdi-text" variant="text" @click.stop="drawer = !drawer"></v-btn>
       <h1>Dashboard</h1>
     </div>
     <div class="flex justify-center">
-      <div class="chart" style="margin-top: 20px; margin-right: 20px; width: 300px; height: 300px;"> <!-- Adjust chart size -->
+      <div class="flex-1 rounded-lg p-4 bg-[#f9f9f9] h-5/6">
         <h2>Overall Orders</h2>
-        <div id="donutChart"></div> <!-- Add a div to hold the ApexCharts donut chart -->
+        <div id="donutChart"></div>
       </div>
-
-      <!-- Removed unused canvas element -->
     </div>
-    <div class="flex flex-row justify-between">
-      <div class="chart" style="margin-right: 20px;">
+    <div class="flex flex-row justify-between gap-3">
+      <div class="flex-1 rounded-lg p-4 bg-[#f9f9f9] h-5/6">
         <h2>Priority</h2>
         <div id="priorityChart"></div>
       </div>
-      <div class="chart" style="margin-right: 20px;">
+      <div class="flex-1 rounded-lg p-4 bg-[#f9f9f9] h-5/6">
         <h2>Factory</h2>
         <div id="factoryChart"></div> 
       </div>
-      <div class="chart">
+      <div class="flex-1 rounded-lg p-4 bg-[#f9f9f9] h-5/6">
         <h2>Lab</h2>
         <div id="labChart"></div> 
       </div>
@@ -269,7 +266,3 @@ export default {
   </div>
 </div>
 </template>
-
-<style scoped>
-@import '@/assets/dashboard.css';
-</style>
