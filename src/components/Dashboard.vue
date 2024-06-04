@@ -84,7 +84,7 @@ export default {
             { name: 'Urgent', data: Object.values(priorityData.urgent), color: 'rgba(54, 162, 235, 0.6)' },
             { name: 'Emergency', data: Object.values(priorityData.emergency), color: 'rgba(255, 206, 86, 0.6)' },
           ],
-          xaxis: { categories: ['Completed', 'Rejected', 'Issued', 'Approved'] },
+          xaxis: { categories: ['Approved', 'Completed', 'Issued', 'Rejected'] },
           fill: { opacity: 1 },
         };
 
@@ -119,7 +119,7 @@ export default {
             { name: 'Fab B', data: Object.values(factoryData['Fab B']), color: 'rgba(54, 162, 235, 0.6)' },
             { name: 'Fab C', data: Object.values(factoryData['Fab C']), color: 'rgba(255, 206, 86, 0.6)' },
           ],
-          xaxis: { categories: ['Completed', 'Rejected', 'Issued', 'Approved'] },
+          xaxis: { categories: ['Approved', 'Completed', 'Issued', 'Rejected'] },
           fill: { opacity: 1 },
         };
 
@@ -155,7 +155,7 @@ export default {
             { name: 'Surface Analysis Lab', data: Object.values(labData.surface), color: 'rgba(54, 162, 235, 0.6)' },
             { name: 'Composition Analysis Lab', data: Object.values(labData.composition), color: 'rgba(255, 206, 86, 0.6)' },
           ],
-          xaxis: { categories: ['Completed', 'Rejected', 'Issued', 'Approved'] },
+          xaxis: { categories: ['Approved', 'Completed', 'Issued', 'Rejected'] },
           fill: { opacity: 1 },
         };
 
@@ -189,9 +189,9 @@ export default {
             colors: undefined
           }
         },
-        colors: ['rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(255, 206, 86, 0.6)', 'rgba(75, 192, 192, 0.6)'],
+        colors: ['rgba(255, 206, 86, 0.6)', 'rgba(75, 192, 192, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(255, 99, 132, 0.6)'],
         series: [], // Initialize with empty array
-        labels: ['Issued', 'Rejected', 'Completed', 'Approved'],
+        labels: ['Approved', 'Completed', 'Issued', 'Rejected'],
         legend: {
           position: 'right',
           offsetY: 80
@@ -213,10 +213,10 @@ export default {
         .then(response => {
           const data = response.data;
           donutChart.updateSeries([
+            data.Approved,
+            data.Completed,
             data.Issued,
             data.Rejected,
-            data.Completed,
-            data.Approved
           ]);
           donutChart.updateOptions({
             title: {
